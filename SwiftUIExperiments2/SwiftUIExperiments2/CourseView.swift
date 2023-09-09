@@ -8,14 +8,10 @@
 import SwiftUI
 
 struct CourseView: View {
-//   @ObservedObject var viewModel: CourseViewModel
-//    @Binding var courses: [Course]
-    let courseModel : CourseModel
-    @State var revision: Int = 0
+    @ObservedObject var courseModel : CourseModel
 
     var body: some View {
         Self._printChanges()
-        _ = revision
         return List(courseModel.courses) { course in
             NavigationLink(value: course) {
                 VStack(alignment: .leading){
@@ -28,18 +24,12 @@ struct CourseView: View {
                     Label("Delete", systemImage: "trash")
                 }
             }
-            .onReceive(course.$name) { _ in
-                revision += 1
-            }
         }
         .listStyle(.plain)
         .navigationTitle("Courses")
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: Course.self) { course in
-            CourseDetailView(course: course)
-        }
-        .onReceive(courseModel.$courses) { _ in
-            revision += 1
+            CourseDetailView(courseModel: courseModel, course: course)
         }
         .toolbar {
             Button(action: {

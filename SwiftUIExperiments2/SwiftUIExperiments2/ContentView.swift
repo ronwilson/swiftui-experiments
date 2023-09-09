@@ -28,9 +28,6 @@ enum Menu: String {
 
 
 struct ContentView: View {
-    //@State var viewModel = CourseViewModel()
-//    @StateObject var viewModel = CourseViewModel()
-//    @State var courses = [Course]()
     let courseModel = CourseModel()
 
     var body: some View {

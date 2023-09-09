@@ -8,18 +8,11 @@
 import SwiftUI
 
 struct CourseDetailView: View {
-    let course: Course
-    @State var courseName: String = ""
-    @State var revision: Int = 0
-
-    init(course: Course) {
-        self.course = course
-        _courseName = State(initialValue: course.name)
-    }
+    let courseModel: CourseModel
+    @ObservedObject var course: Course
 
     var body: some View {
         Self._printChanges()
-        _ = revision
         return VStack {
             HStack {
                 Text("Course Id:")
@@ -28,11 +21,11 @@ struct CourseDetailView: View {
             Section(header: Text("Course Data")) {
                 HStack {
                     Text("Course Name:")
-                    TextField("Course name:", text: $courseName)
+                    TextField("Course name:", text: $course.name)
                         .textFieldStyle(.roundedBorder)
                         .onSubmit {
-                            print("Course name is now \(courseName)")
-                            course.name = courseName
+                            print("Course name is now \(course.name)")
+                            courseModel.refresh()
                         }
                 }
             }
@@ -42,7 +35,7 @@ struct CourseDetailView: View {
                         Text("\(tee.color)")
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button(role: .destructive, action: { course.deleteTee(color: tee.color) } ) {
+                        Button(role: .destructive, action: { course.deleteTee(teeid: tee.id) } ) {
                             Label("Delete", systemImage: "trash")
                         }
                     }
@@ -56,9 +49,6 @@ struct CourseDetailView: View {
         .padding()
         .navigationTitle("Course")
         .navigationBarTitleDisplayMode(.inline)
-        .onReceive(course.$tees) { _ in
-            revision += 1
-        }
         .toolbar {
             Button(action: {
                 course.addTee()
@@ -68,5 +58,4 @@ struct CourseDetailView: View {
             }
         }
     }
-
 }

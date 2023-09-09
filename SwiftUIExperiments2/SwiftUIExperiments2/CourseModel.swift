@@ -7,30 +7,44 @@
 
 import Foundation
 
-struct Tee: Identifiable, Hashable, Codable {
+// DO NOT create id in the constructor.
+// Structs use copy semantics and all copies must have the same id value.
+struct Teebox: Identifiable, Hashable, Codable {
     let id: UUID
-    var color: String
-    var pars: [Int]
-    var holeHcp: [Int]
-    var rating: Double
-    var slope: Int
-    var yardage: Int
+    let hole: Int
+    var par: Int
+    var hcp: Int
 
-    init(holes: Int) {
-        self.id = UUID()
-        self.color = "White"
-        self.pars = Array(repeating: 4, count: holes)
-        self.holeHcp = Array(1...holes)
-        self.rating = 0
-        self.slope = 0
-        self.yardage = 0
+    init(id: UUID, hole: Int, par: Int, hcp: Int) {
+        self.id = id
+        self.hole = hole
+        self.par = par
+        self.hcp = hcp
     }
 }
 
-let defaultHcp9 = [1,2,3,4,5,6,7,8,9]
-let defaultHcp18 = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+struct Tee: Identifiable, Hashable, Codable {
+    let id: UUID
+    var color: String
+    var rating: Double
+    var slope: Int
+    var yardage: Int
+    var teeboxes: [Teebox]
 
-final class Course: Identifiable, Hashable, Codable {
+    init(id: UUID, holes: Int) {
+        self.id = id
+        self.color = ""
+        self.teeboxes = [Teebox]()
+        self.rating = 0
+        self.slope = 0
+        self.yardage = 0
+        for index in 0..<holes {
+            teeboxes.append(Teebox(id: UUID(), hole: index+1, par: 4, hcp: index))
+        }
+    }
+}
+
+final class Course: Identifiable, Hashable, Codable, ObservableObject {
     var id: UUID = UUID()
     @Published var name: String = ""
     @Published var holes: Int = 18
@@ -43,22 +57,30 @@ final class Course: Identifiable, Hashable, Codable {
     }
 
     func addTee() {
-        tees.append(Tee(holes: self.holes))
+        tees.append(Tee(id: UUID(), holes: self.holes))
+        tees.forEach({print("tee id \($0.id)")})
     }
 
-    func setTeeColor(teeid: UUID, color: String) {
+    func updateTee(tee: Tee) {
         // arrays and tees have value semantics, must use an index into the array
-        if let index = tees.firstIndex(where:{$0.id == teeid}) {
-            tees[index].color = color
+        if let index = tees.firstIndex(where:{$0.id == tee.id}) {
+            tees[index] = tee
         } else {
             // this should not happen since setTeeColor is sent from the Tee detail view where there is a Tee value
             // but be defensive
-            print("Error, attempting to set tee color for non-existing Tee with id \(teeid)")
+            print("Error, attempting to update Tee data in course \(self.name) for non-existing Tee with id \(tee.id)")
         }
     }
 
-    func deleteTee(color: String) {
-
+    func deleteTee(teeid: UUID) {
+        // find the tee
+        if let index = tees.firstIndex(where:{$0.id == teeid}) {
+            tees.remove(at: index)
+        } else {
+            // this should not happen since setTeeColor is sent from the Tee detail view where there is a Tee value
+            // but be defensive
+            print("Error, attempting to remove a Tee in course \(self.name) for non-existing Tee with id \(teeid)")
+        }
     }
 
     static func == (lhs: Course, rhs: Course) -> Bool {
@@ -95,10 +117,9 @@ final class Course: Identifiable, Hashable, Codable {
         self.holes = try values.decodeIfPresent(Int.self, forKey: .holes)!
         self.tees = try values.decodeIfPresent([Tee].self, forKey: .tees)!
     }
-
 }
 
-class CourseModel {
+class CourseModel: ObservableObject {
     @Published var courses: [Course] = []
 
     func addCourse(_ course: Course) {
@@ -109,5 +130,9 @@ class CourseModel {
     func deleteCourse(_ course: Course) {
         print("Deleting course \(course.name)")
         courses.removeAll(where: { $0.id == course.id })
+    }
+
+    func refresh() {
+        objectWillChange.send()
     }
 }
