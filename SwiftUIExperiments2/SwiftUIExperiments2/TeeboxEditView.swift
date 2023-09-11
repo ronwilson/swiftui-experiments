@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct TeeboxEditView: View {
-    let teebox: CourseTeebox
-//    let course: Course
+//    let teebox: CourseTeebox
+    let course: Course
+//    @State private var tee: Tee = Tee(id: UUID(), holes: 18)
 //    let tee: Tee
 //    @State private var edittee: Tee = Tee(holes: 18)
     @State private var editHoleIndex = 0
@@ -24,12 +25,18 @@ struct TeeboxEditView: View {
     @State var tee: Tee = Tee(id: UUID(), holes: 18)
     @Environment(\.isPresented) var isPresented
 
-    init(teebox: CourseTeebox, editHoleIndex: Int = 0) {
-        self.teebox = teebox
-        self.editHoleIndex = editHoleIndex
-        _tee = State(initialValue: teebox.tee)
-        print("TeeboxEditView init teebox tee id \(teebox.tee.id), tee id \(tee.id))")
-    }
+//    init(course: Course, teeForEditing: Tee) {
+//        self.course = course
+//        _tee = State(initialValue: teeForEditing)
+//        //print("TeeboxEditView init tee id \(self.tee.id)")
+//    }
+
+//    init(teebox: CourseTeebox, editHoleIndex: Int = 0) {
+//        self.teebox = teebox
+//        self.editHoleIndex = editHoleIndex
+////        _tee = State(initialValue: teebox.tee)
+//        print("TeeboxEditView init teebox tee id \(teebox.tee.id)")
+//    }
 
     var body: some View {
         Self._printChanges()
@@ -39,7 +46,7 @@ struct TeeboxEditView: View {
                 VStack {
                     VStack {
                         HStack {
-                            Stepper("Edit Teebox:", value: $editHoleIndex, in: 0...teebox.tee.teeboxes.count-1)
+                            Stepper("Edit Teebox:", value: $editHoleIndex, in: 0...tee.teeboxes.count-1)
                             //                                Stepper(value: $editHoleIndex, in 1...tee.teeboxes.count, step:1, label:Label("Edit Teebox")) { changed in
                             //                                    print("Teebox changed \(changed)")
                             //                                }
@@ -106,11 +113,11 @@ struct TeeboxEditView: View {
         .padding()
         .navigationTitle("Teeboxes")
         .navigationBarTitleDisplayMode(.inline)
-        .onChange(of: isPresented) { newValue in
-            if !newValue {
-                teebox.course.updateTee(tee: tee)
-            }
-        }
+//        .onChange(of: isPresented) { newValue in
+//            if !newValue {
+////                course.updateTee(tee: tee)
+//            }
+//        }
     }
 
 }

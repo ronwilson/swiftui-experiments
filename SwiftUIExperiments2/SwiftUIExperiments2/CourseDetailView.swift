@@ -25,6 +25,7 @@ struct CourseDetailView: View {
                         .textFieldStyle(.roundedBorder)
                         .onSubmit {
                             print("Course name is now \(course.name)")
+                            // This will trigger an update of the CourseModel to refresh the course names in the CourseView.
                             courseModel.refresh()
                         }
                 }

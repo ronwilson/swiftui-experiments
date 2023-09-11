@@ -29,6 +29,7 @@ enum Menu: String {
 
 struct ContentView: View {
     let courseModel = CourseModel()
+    private var invalidNavMenuItem : Bool = false
 
     var body: some View {
         Self._printChanges()

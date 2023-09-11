@@ -7,13 +7,25 @@
 
 import SwiftUI
 
-struct CourseTeebox : Hashable {
-    let course: Course
-    let tee: Tee
+//struct CourseTeebox : Hashable {
+//    let course: Course
+//    @Binding var tee: Tee
+//    static func == (lhs: CourseTeebox, rhs: CourseTeebox) -> Bool {
+//        return true
+//    }
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(course)
+//        hasher.combine(tee.id)
+//    }
+//}
+
+struct TeeViewNavItem : Identifiable, Hashable {
+    let id: UUID = UUID()
+    let type: String
 }
 
 struct TeeView: View {
-    let course: Course
+    @ObservedObject var course: Course
     @State var tee: Tee
     @State var editingTeeboxes = false
 
@@ -32,6 +44,7 @@ struct TeeView: View {
         formatter.maximumFractionDigits = 1
         return formatter
     }()
+    let navigationItems = [TeeViewNavItem(type: "Teeboxes")]
 
     var body: some View {
         Self._printChanges()
@@ -98,11 +111,13 @@ struct TeeView: View {
             }
 //            Section(header: Text("Tee Boxes")) {
             Section {
-                NavigationLink(value:CourseTeebox(course: course, tee: tee)) {
-                    Text("Edit Teeboxes")
+                ForEach(navigationItems) { value in
+                    NavigationLink(value:value) {
+                        Text("Edit Teeboxes")
+                    }
                 }
-                .navigationDestination(for: CourseTeebox.self) { teebox in
-                    TeeboxEditView(teebox: teebox)
+                .navigationDestination(for: TeeViewNavItem.self) { link in
+                    TeeboxEditView(course: course)
                 }
                 GeometryReader { reader in
                     VStack {
