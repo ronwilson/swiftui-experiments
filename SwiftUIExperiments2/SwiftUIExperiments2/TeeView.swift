@@ -117,7 +117,8 @@ struct TeeView: View {
                     }
                 }
                 .navigationDestination(for: TeeViewNavItem.self) { link in
-                    TeeboxEditView(course: course)
+                    TeeboxEditView()
+//                    TeeboxEditView(course: course)
                 }
                 GeometryReader { reader in
                     VStack {

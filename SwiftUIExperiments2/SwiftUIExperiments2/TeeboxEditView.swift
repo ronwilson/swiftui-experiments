@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TeeboxEditView: View {
 //    let teebox: CourseTeebox
-    let course: Course
+    let course: Course = Course(name: "", holes: 18)
 //    @State private var tee: Tee = Tee(id: UUID(), holes: 18)
 //    let tee: Tee
 //    @State private var edittee: Tee = Tee(holes: 18)
@@ -79,7 +79,7 @@ struct TeeboxEditView: View {
                         //                                    .foregroundColor(table.labelColor)
                             .frame(width: reader.size.width * 0.33, alignment: .leading)
                     }
-                    ScrollView {
+//                    ScrollView {
                         ForEach(tee.teeboxes) { teebox in
                             HStack(alignment: .top) {
                                 Text("\(teebox.hole)")
@@ -105,7 +105,7 @@ struct TeeboxEditView: View {
                                 //                                    .foregroundColor(table.labelColor)
                                     .frame(width: reader.size.width * 0.33, alignment: .leading)
                             }
-                        }
+//                        }
                     }
                 }
             }
