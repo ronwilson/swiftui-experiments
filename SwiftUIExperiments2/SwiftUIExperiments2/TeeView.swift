@@ -19,10 +19,10 @@ import SwiftUI
 //    }
 //}
 
-struct TeeViewNavItem : Identifiable, Hashable {
-    let id: UUID = UUID()
-    let type: String
-}
+//struct TeeViewNavItem : Identifiable, Hashable {
+//    let id: UUID = UUID()
+//    let type: String
+//}
 
 struct TeeView: View {
     @ObservedObject var course: Course
@@ -44,7 +44,7 @@ struct TeeView: View {
         formatter.maximumFractionDigits = 1
         return formatter
     }()
-    let navigationItems = [TeeViewNavItem(type: "Teeboxes")]
+//    let navigationItems = [TeeViewNavItem(type: "Teeboxes")]
 
     var body: some View {
         Self._printChanges()
@@ -111,14 +111,8 @@ struct TeeView: View {
             }
 //            Section(header: Text("Tee Boxes")) {
             Section {
-                ForEach(navigationItems) { value in
-                    NavigationLink(value:value) {
-                        Text("Edit Teeboxes")
-                    }
-                }
-                .navigationDestination(for: TeeViewNavItem.self) { link in
-                    TeeboxEditView()
-//                    TeeboxEditView(course: course)
+                NavigationLink("Edit Teeboxes") {
+                    TeeboxEditView(course: course, tee: tee)
                 }
                 GeometryReader { reader in
                     VStack {

@@ -9,10 +9,8 @@ import SwiftUI
 
 struct TeeboxEditView: View {
 //    let teebox: CourseTeebox
-    let course: Course = Course(name: "", holes: 18)
-//    @State private var tee: Tee = Tee(id: UUID(), holes: 18)
-//    let tee: Tee
-//    @State private var edittee: Tee = Tee(holes: 18)
+    @ObservedObject var course: Course
+    @State var tee: Tee
     @State private var editHoleIndex = 0
     let gridHeaderFont = Font.system(Font.TextStyle.headline)
     let gridNumbersFont = Font.system(Font.TextStyle.body)
@@ -22,7 +20,6 @@ struct TeeboxEditView: View {
         formatter.maximumFractionDigits = 0
         return formatter
     }()
-    @State var tee: Tee = Tee(id: UUID(), holes: 18)
     @Environment(\.isPresented) var isPresented
 
 //    init(course: Course, teeForEditing: Tee) {
