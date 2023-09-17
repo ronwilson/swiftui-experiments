@@ -16,16 +16,24 @@ struct CourseDetailView: View {
     // course needs to be observed so that changes in the list of Tees for the course
     // will cause automatic updates for the List(course.tees) below.
     @ObservedObject var course: Course
+    @State private var holestag = 0
+
+    init(courseModel: CourseModel, course: Course, holestag: Int = 0) {
+        self.courseModel = courseModel
+        self.course = course
+        _holestag = State(initialValue: course.holes == 18 ? 0 : 1)
+    }
 
     var body: some View {
         Self._printChanges()
         return VStack {
             // This can be commented out. There's no functional reason to display the id value
-            HStack {
-                Text("Course Id:")
-                Text("\(course.id)")
-            }
-            Section(header: Text("Course Data")) {
+//            HStack {
+//                Text("Course Id:")
+//                Text("\(course.id)")
+//            }
+            //Section(header: Text("Course Data")) {
+            Section() {
                 HStack {
                     Text("Course Name:")
                     TextField("Course name:", text: $course.name)
@@ -36,7 +44,22 @@ struct CourseDetailView: View {
                             courseModel.refresh()
                         }
                 }
-                // TODO: Add the remaining Course attributes here so they can be edited
+                HStack {
+                    Text("Number of Holes:")
+                    Picker("Holes", selection: $holestag) {
+                        Text("18").tag(0)
+                        Text("9").tag(1)
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: holestag) { value in
+                        if value == 0 {
+                            course.holes = 18
+                        } else {
+                            course.holes = 9
+                        }
+                        refreshTees()
+                    }
+                }
             }
             Section(header: Text("Tees")) {
                 // The list of Tees for the Course. This list and the delete swipe action work the
@@ -68,6 +91,17 @@ struct CourseDetailView: View {
             }) {
                 Image(systemName: "plus")
                 Text("Tee")
+            }
+        }
+    }
+
+    // The purpose of this function is to refresh the teebox list for any Tees that do not have the same
+    // number of teeboxes as the course has holes. This is called whenever the user changes the number of
+    // holes for the course.
+    private func refreshTees() {
+        for tee in course.tees {
+            if tee.teeboxes.count != course.holes {
+                course.refreshTeeHoleCount(tee:tee)
             }
         }
     }

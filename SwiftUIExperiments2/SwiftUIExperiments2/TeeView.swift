@@ -15,7 +15,13 @@ struct TeeView: View {
     // the caller (the CourseDetailView), and we need it to be wrapped with @State
     // so that the values can be edited through Bindings.
     @State var tee: Tee // This is a COPY of the Tee in the course instance, not a reference to a Class instance.
-//    @State var editingTeeboxes = false
+    @State var teepar: Int
+
+    init(course: Course, tee: Tee) {
+        self.course = course
+        _tee = State(initialValue: tee)
+        _teepar = State(initialValue: tee.par)
+    }
 
     // Fonts and Formatters for the editing controls
     let gridHeaderFont = Font.system(Font.TextStyle.headline)
@@ -33,12 +39,12 @@ struct TeeView: View {
     // infinite loop when navigating to the TeeboxEditView.
     // To see this, uncomment this code in both this TeeView and the TeeboxEditView and then run the app
     // and navigate to a TeeboxEditView.
-//    private let intFormatter: NumberFormatter = {
-//        let formatter = NumberFormatter()
-//        formatter.numberStyle = .decimal
-//        formatter.maximumFractionDigits = 0
-//        return formatter
-//    }()
+    private let intFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        return formatter
+    }()
 
     var body: some View {
         Self._printChanges()
@@ -87,104 +93,31 @@ struct TeeView: View {
                     }
                     .textFieldStyle(.roundedBorder)
                 }
+                HStack {
+                    Text("Par:")
+                    Text("\(teepar)")
+                }
             }
             Section {
-//                NavigationLink("Edit Teeboxes") {
-//                    // Navigate to a view where the teebox data can be modified.
-//                    // I did this just to avoid making this view any more complicated.
-//                    TeeboxEditView(course: course, tee: tee)
-//                }
-                // Display all the Teeboxes (pars and handicaps) for this Tee.
-                // This is a VStack where each line is an HStack, and each HStack is divided
-                // into 3 columns where each column is 1/3 of the screen width.
-                GeometryReader { reader in
-                    VStack {
-                        // Make a header row
-                        HStack(alignment: .top, spacing: 8) {
-                            Text("Hole")
-                                .font(gridHeaderFont)
-                                .frame(width: reader.size.width * 0.33, alignment: .leading)
-                            Text("Par")
-                                .font(gridHeaderFont)
-                                .frame(width: reader.size.width * 0.33, alignment: .leading)
-                            Text("Hcp")
-                                .font(gridHeaderFont)
-                                .frame(width: reader.size.width * 0.33, alignment: .leading)
-                        }
+                // I refactored the teebox editing functionality to its own View
+                // because editing the teeboxes required several state variables.
 
-                        // The list of teebox data can be scrollable if you want to support
-                        // running the app in Landscape mode. However, all the Views for
-                        // Course managment fit comfortably in a vertical orientation, so it's just easier to
-                        // avoid the ScrollView and just support Portait orientation only.
-                        // However, I'm using this ScrollView to show some other cool features.
-                        ScrollView {
-                            
-                            // ForEach is another way to make a list. ForEach basically creates a View
-                            // for each item in a RandomAccessCollection of some data type.
-                            // The closure passed to a ForEach is run inside a result builder.
-                            // Unlike the 'body' attribute for SwiftUI Views, you can't add a return
-                            // statement before creating a view.
-                            // If the code is changed to something like
-                            //   ForEach(tee.teeboxes) { teebox in
-                            //      let i = 0
-                            //      return HStack(alignment: .top) {
-                            // you'll get the error "Cannot use explicit 'return' statement in the body of
-                            // result builder 'TableRowBuilder<_>'"
-                            ForEach(tee.teeboxes) { teebox in
-                                // Each item in a ForEach must be a View. Here were making each row be an HStack
-                                HStack(alignment: .top) {
-                                    // The hole number
-                                    Text("\(teebox.hole)")
-                                        .font(gridNumbersFont)
-                                        .frame(width: reader.size.width * 0.33, alignment: .leading)
-
-                                    // The par value
-                                    Text("\(teebox.par)")
-                                        .font(gridNumbersFont)
-                                        .frame(width: reader.size.width * 0.33, alignment: .leading)        // 1/3 of screen
-                                        .gesture(DragGesture(minimumDistance: 0).onChanged { gesture in
-                                            //print("hole \(teebox.hole) : \(gesture.translation)")
-                                            if gesture.translation.height < -30.0 {
-                                                if teebox.par == 5 {
-                                                    print("hole \(teebox.hole) : par 3")
-                                                }
-                                            } else if gesture.translation.height < -10.0 {
-                                                if teebox.par > 3 {
-                                                    print("hole \(teebox.hole) : par \(teebox.par - 1)")
-                                                }
-                                            } else if gesture.translation.height > 10.0 {
-                                                if teebox.par < 5 {
-                                                    print("hole \(teebox.hole) : par \(teebox.par + 1)")
-                                                }
-                                            } else if gesture.translation.height > 30.0 {
-                                                if teebox.par == 3 {
-                                                    print("hole \(teebox.hole) : par 5")
-                                                }
-                                            }
-                                        })
-                                    //                                .onEnded { _ in
-                                    //                                    if abs(offset.width) > 100 {
-                                    //                                        // remove the card
-                                    //                                    } else {
-                                    //                                        offset = .zero
-                                    //                                    }
-                                    //                                }
-                                    Text("\(teebox.hcp)")
-                                        .font(gridNumbersFont)
-                                        .frame(width: reader.size.width * 0.33, alignment: .leading)
-                                        .gesture(DragGesture(minimumDistance: 0).onChanged { gesture in
-                                        })
-                                }
-                            }
-                            
-                        } // ScrollView
-                    }
-                }
+                // The last parameter is a Binding to the teepar State variable that
+                // is displayed in the HStack just above. When the user edits the
+                // par values for the holes, this binding is update in the
+                // TeeboxEditView code, which will cause the Text view above to be
+                // updated.
+                TeeboxEditView(tee: tee, course:course, holes: course.holes, teepar: $teepar)
             }
         }
         .padding()
         .navigationTitle("Tee")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func secondsValue(for date: Date) -> Double {
+        let seconds = Calendar.current.component(.second, from: date)
+        return Double(seconds) / 60
     }
 
 }

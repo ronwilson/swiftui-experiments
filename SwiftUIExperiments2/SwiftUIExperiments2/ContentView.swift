@@ -32,12 +32,12 @@ enum Menu: String {
 // cyclical referencing and the app goes into an infinite loop.
 // Using a global variable is probably not the way to fix the problem,
 // but it lets me get to where all the experimental views are working.
-let intFormatter: NumberFormatter = {
-    let formatter = NumberFormatter()
-    formatter.numberStyle = .decimal
-    formatter.maximumFractionDigits = 0
-    return formatter
-}()
+//let intFormatter: NumberFormatter = {
+//    let formatter = NumberFormatter()
+//    formatter.numberStyle = .decimal
+//    formatter.maximumFractionDigits = 0
+//    return formatter
+//}()
 
 // this is the top-level view for the app
 struct ContentView: View {

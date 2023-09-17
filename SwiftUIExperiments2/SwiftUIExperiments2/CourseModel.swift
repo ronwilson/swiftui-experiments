@@ -35,13 +35,25 @@ struct Tee: Identifiable, Hashable, Codable {
     var rating: Double
     var slope: Int
     var teeboxes: [Teebox]
+    var par: Int {
+        return teeboxes.reduce(0, {$0 + $1.par})
+    }
+    static private let hcp18: [Int] = [1,3,5,7,9,11,13,15,17,2,4,6,8,10,12,14,16,18]
+    static private let hcp9: [Int] = [1,2,3,4,5,6,7,8,9]
 
     init(id: UUID, holes: Int) {
         self.id = id
-        self.color = ""
+        self.color = "Color"
         self.teeboxes = [Teebox]()
         self.rating = 0
         self.slope = 0
+        for index in 0..<holes {
+            teeboxes.append(Teebox(id: UUID(), hole: index+1, par: 4, hcp: holes > 9 ? Tee.hcp18[index] : Tee.hcp9[index]))
+        }
+    }
+
+    mutating func holesChanged(holes: Int) {
+        self.teeboxes = [Teebox]()
         for index in 0..<holes {
             teeboxes.append(Teebox(id: UUID(), hole: index+1, par: 4, hcp: index))
         }
@@ -103,6 +115,18 @@ final class Course: Identifiable, Hashable, Codable, ObservableObject {
             // because originally, the id value was assigned automatically in the initializer. This is
             // why I changed the Tee Struct to take an external ID value in the initializer.
             print("Error, attempting to update Tee data in course \(self.name) for non-existing Tee with id \(tee.id)")
+        }
+    }
+
+    func refreshTeeHoleCount(tee: Tee) {
+        // arrays and tees have value semantics, must use an index into the array
+        if let index = tees.firstIndex(where:{$0.id == tee.id}) {
+            tees[index].holesChanged(holes: holes)
+        } else {
+            // this should not happen since refreshTeeHoleCount is sent from the course detail view
+            // where the tee is already in the tees array. However, print an error diagnostic
+            // as a defensive measure.
+            print("Error, attempting to refresh Tee data in course \(self.name) for non-existing Tee with id \(tee.id)")
         }
     }
 

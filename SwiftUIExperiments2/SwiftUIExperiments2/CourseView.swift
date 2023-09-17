@@ -31,7 +31,7 @@ struct CourseView: View {
             NavigationLink(value: course) {
                 VStack(alignment: .leading){
                     Text("\(course.name)")
-                    Text("\(course.id)")
+                    //Text("\(course.id)")
                 }
             }
             // Note the allowsFullSwipe: false. This forces the user to tap the trash symbol.
