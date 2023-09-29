@@ -41,7 +41,7 @@ struct CourseDetailView: View {
                         .onSubmit {
                             print("Course name is now \(course.name)")
                             // This will trigger an update of the CourseModel to refresh the course names in the CourseView.
-                            model.courseUpdated()
+                            //model.courseUpdated()
                         }
                 }
                 HStack {
@@ -60,6 +60,13 @@ struct CourseDetailView: View {
                         refreshTees()
                     }
                 }
+                .disabled(course.teesEdited)
+                HStack {
+                    Toggle(isOn: $course.front9OddHcp) {
+                        Text("Front Nine has Odd Handicaps")
+                    }
+                }
+                .disabled(course.teesEdited)
             }
             Section(header: Text("Tees")) {
                 // The list of Tees for the Course. This list and the delete swipe action work the

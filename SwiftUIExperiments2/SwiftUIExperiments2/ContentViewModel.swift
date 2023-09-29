@@ -32,7 +32,7 @@ final class ContentViewModel: ObservableObject {
         case .loaded(var courseA):
             print("Adding course \(course.name)")
             courseA.append(course)
-//            refresh()
+            courses.state = .loaded(courseA)
         }
     }
 
@@ -40,17 +40,17 @@ final class ContentViewModel: ObservableObject {
         if case var .loaded(courseA) = courses.state {
             print("Deleting course name \(course.name) (id \(course.id))")
             courseA.removeAll(where: { $0.id == course.id })
-//            courses.state = .loaded(courseA)
+            courses.state = .loaded(courseA)
         } else {
             print("deleteCourse called when state is \(courses.state)")
         }
     }
 
-    func refresh() {
-        objectWillChange.send()
-    }
+//    func refresh() {
+//        objectWillChange.send()
+//    }
 
-    func courseUpdated() {
-        courses.objectWillChange.send()
-    }
+//    func courseUpdated() {
+//        courses.objectWillChange.send()
+//    }
 }

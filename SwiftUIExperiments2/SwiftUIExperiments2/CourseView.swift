@@ -55,23 +55,6 @@ struct CourseView: View {
                     ListView(err:err, model:model, courses:courseA)
                 case let .loaded(courseA):
                     ListView(err:nil, model:model, courses:courseA)
-//                    List(courses) { course in
-//                        NavigationLink(value: course) {
-//                            VStack(alignment: .leading){
-//                                Text("\(course.name)")
-//                                //Text("\(course.id)")
-//                            }
-//                        }
-//                        // Note the allowsFullSwipe: false. This forces the user to tap the trash symbol.
-//                        // Kind of like saying "are you sure". Allowing full swipe deletes might be
-//                        // a little dangerous unless Undo/Redo management is added.
-//                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-//                            Button(role: .destructive, action: { model.deleteCourse(course) } ) {
-//                                Label("Delete", systemImage: "trash")
-//                            }
-//                        }
-//                    }
-//                    .listStyle(.plain)
                 }
                 //Text("\(courses.state.stateValue)")
             }
@@ -99,8 +82,10 @@ struct CourseView: View {
         var err: Error?
         var model: ContentViewModel
         var courses: [Course]
+        @State var revision: Int = 0
         var body: some View {
             Self._printChanges()
+            _ = revision
             return VStack {
                 if let e = err {
                     Text("\(e.localizedDescription)")
@@ -111,6 +96,10 @@ struct CourseView: View {
                             Text("\(course.name)")
                             //Text("\(course.id)")
                         }
+                    }
+                    .onReceive(course.$name) { _ in
+                        print("CourseView ListView course name changed received")
+                        revision += 1
                     }
                     // Note the allowsFullSwipe: false. This forces the user to tap the trash symbol.
                     // Kind of like saying "are you sure". Allowing full swipe deletes might be

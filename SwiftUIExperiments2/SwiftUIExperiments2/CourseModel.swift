@@ -68,7 +68,9 @@ final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableO
     // publish the attributes that can be changed
     @Published var name: String = ""
     @Published var holes: Int = 18
+    @Published var front9OddHcp: Bool = true
     @Published var tees: [Tee] = [Tee]()
+    @Published var teesEdited: Bool = false
 
     init(name: String, holes: Int) {
         self.name = name
@@ -109,6 +111,7 @@ final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableO
         // arrays and tees have value semantics, must use an index into the array
         if let index = tees.firstIndex(where:{$0.id == tee.id}) {
             tees[index] = tee
+            teesEdited = true
         } else {
             // this should not happen since updateTee is sent from the Tee detail view where it's guaranteed
             // that there is a Tee. However, it did happen. The reason was that a Tee's id value changed

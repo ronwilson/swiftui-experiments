@@ -71,7 +71,8 @@ class PersistenceManager {
     func loadCoursesFile(from url: URL) async -> Result<[Course], Error> {
         do {
             // simulate extended async delay
-            try await Task.sleep(nanoseconds: UInt64(5 * Double(NSEC_PER_SEC)))
+            //try await Task.sleep(nanoseconds: UInt64(5 * Double(NSEC_PER_SEC)))
+
             // if this fails, there is no courses file
             let data = try Data(contentsOf: url)
             do {
