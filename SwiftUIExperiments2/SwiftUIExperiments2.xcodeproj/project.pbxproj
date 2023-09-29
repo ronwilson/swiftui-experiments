@@ -16,6 +16,18 @@
 		083AAC132AAA4A6000929FAA /* CourseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AAC0F2AAA4A6000929FAA /* CourseModel.swift */; };
 		083AAC152AAA9A0D00929FAA /* TeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AAC142AAA9A0D00929FAA /* TeeView.swift */; };
 		083AAC172AACCE6000929FAA /* TeeboxEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AAC162AACCE5F00929FAA /* TeeboxEditView.swift */; };
+		08B869672ABF333D00799608 /* LandingArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869662ABF333D00799608 /* LandingArea.swift */; };
+		08B869692ABF3B6000799608 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869682ABF3B6000799608 /* ScoreView.swift */; };
+		08B8696B2ABF5F4300799608 /* LandingAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8696A2ABF5F4300799608 /* LandingAreaView.swift */; };
+		08B8696D2ABFB73400799608 /* SandTrapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8696C2ABFB73400799608 /* SandTrapView.swift */; };
+		08B8696F2AC00A0D00799608 /* RoundsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8696E2AC00A0D00799608 /* RoundsView.swift */; };
+		08B869712AC1F48700799608 /* NavigationStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869702AC1F48700799608 /* NavigationStateManager.swift */; };
+		08B869732AC1FCD000799608 /* NewRoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869722AC1FCD000799608 /* NewRoundView.swift */; };
+		08B869752AC203DC00799608 /* ChooseTeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869742AC203DC00799608 /* ChooseTeeView.swift */; };
+		08B869772AC2076100799608 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869762AC2076100799608 /* PersistenceManager.swift */; };
+		08B869792AC3893000799608 /* CoursesModelLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869782AC3893000799608 /* CoursesModelLoader.swift */; };
+		08B8697B2AC3897800799608 /* ModelLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8697A2AC3897800799608 /* ModelLoader.swift */; };
+		08B8697D2AC4B69300799608 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8697C2AC4B69300799608 /* ContentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +41,18 @@
 		083AAC0F2AAA4A6000929FAA /* CourseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseModel.swift; sourceTree = "<group>"; };
 		083AAC142AAA9A0D00929FAA /* TeeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeeView.swift; sourceTree = "<group>"; };
 		083AAC162AACCE5F00929FAA /* TeeboxEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeeboxEditView.swift; sourceTree = "<group>"; };
+		08B869662ABF333D00799608 /* LandingArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingArea.swift; sourceTree = "<group>"; };
+		08B869682ABF3B6000799608 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
+		08B8696A2ABF5F4300799608 /* LandingAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingAreaView.swift; sourceTree = "<group>"; };
+		08B8696C2ABFB73400799608 /* SandTrapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandTrapView.swift; sourceTree = "<group>"; };
+		08B8696E2AC00A0D00799608 /* RoundsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundsView.swift; sourceTree = "<group>"; };
+		08B869702AC1F48700799608 /* NavigationStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStateManager.swift; sourceTree = "<group>"; };
+		08B869722AC1FCD000799608 /* NewRoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRoundView.swift; sourceTree = "<group>"; };
+		08B869742AC203DC00799608 /* ChooseTeeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseTeeView.swift; sourceTree = "<group>"; };
+		08B869762AC2076100799608 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		08B869782AC3893000799608 /* CoursesModelLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursesModelLoader.swift; sourceTree = "<group>"; };
+		08B8697A2AC3897800799608 /* ModelLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoader.swift; sourceTree = "<group>"; };
+		08B8697C2AC4B69300799608 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,10 +87,22 @@
 			children = (
 				083AAC0F2AAA4A6000929FAA /* CourseModel.swift */,
 				083AAC002AAA49BF00929FAA /* ContentView.swift */,
+				08B8697C2AC4B69300799608 /* ContentViewModel.swift */,
 				083AAC0E2AAA4A6000929FAA /* CourseView.swift */,
 				083AAC0C2AAA4A6000929FAA /* CourseDetailView.swift */,
 				083AAC142AAA9A0D00929FAA /* TeeView.swift */,
 				083AAC162AACCE5F00929FAA /* TeeboxEditView.swift */,
+				08B869682ABF3B6000799608 /* ScoreView.swift */,
+				08B8696E2AC00A0D00799608 /* RoundsView.swift */,
+				08B869722AC1FCD000799608 /* NewRoundView.swift */,
+				08B869742AC203DC00799608 /* ChooseTeeView.swift */,
+				08B869662ABF333D00799608 /* LandingArea.swift */,
+				08B8696A2ABF5F4300799608 /* LandingAreaView.swift */,
+				08B8696C2ABFB73400799608 /* SandTrapView.swift */,
+				08B869702AC1F48700799608 /* NavigationStateManager.swift */,
+				08B8697A2AC3897800799608 /* ModelLoader.swift */,
+				08B869782AC3893000799608 /* CoursesModelLoader.swift */,
+				08B869762AC2076100799608 /* PersistenceManager.swift */,
 				083AABFE2AAA49BF00929FAA /* SwiftUIExperiments2App.swift */,
 				083AAC022AAA49BF00929FAA /* Assets.xcassets */,
 				083AAC042AAA49BF00929FAA /* Preview Content */,
@@ -152,13 +188,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B8697B2AC3897800799608 /* ModelLoader.swift in Sources */,
 				083AAC132AAA4A6000929FAA /* CourseModel.swift in Sources */,
+				08B869672ABF333D00799608 /* LandingArea.swift in Sources */,
+				08B869692ABF3B6000799608 /* ScoreView.swift in Sources */,
+				08B869772AC2076100799608 /* PersistenceManager.swift in Sources */,
 				083AAC152AAA9A0D00929FAA /* TeeView.swift in Sources */,
 				083AAC012AAA49BF00929FAA /* ContentView.swift in Sources */,
+				08B869792AC3893000799608 /* CoursesModelLoader.swift in Sources */,
 				083AAC172AACCE6000929FAA /* TeeboxEditView.swift in Sources */,
 				083AAC122AAA4A6000929FAA /* CourseView.swift in Sources */,
+				08B8696D2ABFB73400799608 /* SandTrapView.swift in Sources */,
+				08B8696B2ABF5F4300799608 /* LandingAreaView.swift in Sources */,
+				08B8697D2AC4B69300799608 /* ContentViewModel.swift in Sources */,
 				083AAC102AAA4A6000929FAA /* CourseDetailView.swift in Sources */,
+				08B869752AC203DC00799608 /* ChooseTeeView.swift in Sources */,
+				08B869732AC1FCD000799608 /* NewRoundView.swift in Sources */,
+				08B869712AC1F48700799608 /* NavigationStateManager.swift in Sources */,
 				083AABFF2AAA49BF00929FAA /* SwiftUIExperiments2App.swift in Sources */,
+				08B8696F2AC00A0D00799608 /* RoundsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

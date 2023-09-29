@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct CourseDetailView: View {
-    // courseModel does not need to be an @ObservedObject because there's nothing on
+    // model does not need to be an @ObservedObject because there's nothing on
     // this view that depends on changes in the courseModel. The only reason to have
     // courseModel here is so that when a course name is changed, we can trigger an
     // update in the CourseView.
-    let courseModel: CourseModel
+    let model: ContentViewModel
     // course needs to be observed so that changes in the list of Tees for the course
     // will cause automatic updates for the List(course.tees) below.
     @ObservedObject var course: Course
     @State private var holestag = 0
 
-    init(courseModel: CourseModel, course: Course, holestag: Int = 0) {
-        self.courseModel = courseModel
+    init(model: ContentViewModel, course: Course, holestag: Int = 0) {
+        self.model = model
         self.course = course
         _holestag = State(initialValue: course.holes == 18 ? 0 : 1)
     }
@@ -41,7 +41,7 @@ struct CourseDetailView: View {
                         .onSubmit {
                             print("Course name is now \(course.name)")
                             // This will trigger an update of the CourseModel to refresh the course names in the CourseView.
-                            courseModel.refresh()
+                            model.courseUpdated()
                         }
                 }
                 HStack {

@@ -62,7 +62,7 @@ struct Tee: Identifiable, Hashable, Codable {
 
 // Make the Course a class so it can be observable. This makes it easier and more
 // natural to pass a course to a multiple views.
-final class Course: Identifiable, Hashable, Codable, ObservableObject {
+final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableObject {
     // id doesn't need to be published because it won't ever be changed. It is not private, so it can be displayed.
     var id: UUID = UUID()
     // publish the attributes that can be changed
@@ -144,6 +144,13 @@ final class Course: Identifiable, Hashable, Codable, ObservableObject {
         hasher.combine(holes)
     }
 
+//    func copy(with zone: NSZone? = nil) -> Any {
+//        var copy = Course(name: self.name, holes: self.holes)
+//        copy.id = self.id
+//        copy.tees = self.tees
+//        return copy
+//    }
+
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case name = "Name"
@@ -165,25 +172,5 @@ final class Course: Identifiable, Hashable, Codable, ObservableObject {
         self.name = try values.decodeIfPresent(String.self, forKey: .name)!
         self.holes = try values.decodeIfPresent(Int.self, forKey: .holes)!
         self.tees = try values.decodeIfPresent([Tee].self, forKey: .tees)!
-    }
-}
-
-// this top-levl model class is required only so that there is a convenient way
-// to Observe changes in the courses array.
-class CourseModel: ObservableObject {
-    @Published var courses: [Course] = []
-
-    func addCourse(_ course: Course) {
-        print("Adding course \(course.name)")
-        courses.append(course)
-    }
-
-    func deleteCourse(_ course: Course) {
-        print("Deleting course \(course.name)")
-        courses.removeAll(where: { $0.id == course.id })
-    }
-
-    func refresh() {
-        objectWillChange.send()
     }
 }
