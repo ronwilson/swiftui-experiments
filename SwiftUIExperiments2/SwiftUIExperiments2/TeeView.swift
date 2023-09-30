@@ -8,15 +8,27 @@
 import SwiftUI
 
 struct TeeView: View {
+
+    // used to track the focused text field
+    enum FocusableField {
+        case color, rating, slope
+    }
+
     // changes to the course will not affect this view,
     // so course does not need to be Observed.
     let course: Course
     // Tee is a Struct, not a Class, so we'll need a copy of the Tee from
     // the caller (the CourseDetailView), and we need it to be wrapped with @State
     // so that the values can be edited through Bindings.
-    @State var tee: Tee // This is a COPY of the Tee in the course instance, not a reference to a Class instance.
-    @State var teepar: Int
+    @State var tee: Tee     // This is a COPY of the Tee in the course instance, not a reference to a Class instance.
+                            // That means that any changes to the tee must be submitted to the Course object by calling
+                            // course.updateTee
+    @State var teepar: Int  // The total Par for the tee is shown after the text entry fields. It is a @State wrapper
+                            // so that a binding can be passed to the TeeboxEditView, where changes to the pars are totaled
+                            // and displayed in this view.
+    @FocusState private var teefocus: FocusableField?
 
+    // This is needed so that _teepar can be initialized
     init(course: Course, tee: Tee) {
         self.course = course
         _tee = State(initialValue: tee)
@@ -73,6 +85,7 @@ struct TeeView: View {
                         }
                     }
                     .textFieldStyle(.roundedBorder)
+                    .focused($teefocus, equals: .color)
                 }
                 // The Rating and Slope editor controls work like Tee Color above, the same comments apply.
                 HStack {
@@ -84,6 +97,8 @@ struct TeeView: View {
                         }
                     }
                     .textFieldStyle(.roundedBorder)
+                    .focused($teefocus, equals: .rating)
+
                     Text("Slope:")
                     TextField("slope:", value: $tee.slope, formatter: intFormatter) { started in
                         if !started {
@@ -92,6 +107,7 @@ struct TeeView: View {
                         }
                     }
                     .textFieldStyle(.roundedBorder)
+                    .focused($teefocus, equals: .slope)
                 }
                 HStack {
                     Text("Par:")
@@ -102,12 +118,14 @@ struct TeeView: View {
                 // I refactored the teebox editing functionality to its own View
                 // because editing the teeboxes required several state variables.
 
-                // The last parameter is a Binding to the teepar State variable that
+                // The teepar parameter is a Binding to the teepar State variable that
                 // is displayed in the HStack just above. When the user edits the
-                // par values for the holes, this binding is update in the
+                // par values for the holes, this binding is updated in the
                 // TeeboxEditView code, which will cause the Text view above to be
                 // updated.
-                TeeboxEditView(tee: tee, course:course, holes: course.holes, teepar: $teepar)
+                // The teefocus parameter is passed as a wrapper. Try using 'teefocus' or '$teefocus' to
+                // see some instructional compiler errors.
+                TeeboxEditView(tee: $tee, course:course, holes: course.holes, teepar: $teepar, teefocus: _teefocus)
             }
         }
         .padding()

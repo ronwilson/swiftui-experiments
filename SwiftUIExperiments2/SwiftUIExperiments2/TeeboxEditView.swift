@@ -20,10 +20,12 @@ struct TeeboxEditView: View {
     let teeboxHeaderFont = Font.system(Font.TextStyle.headline)
     let teeboxNumbersFont = Font.system(Font.TextStyle.body)
     // values passed from TeeView
-    @State var tee: Tee
+    @Binding var tee: Tee       // A binding to the tee Struct in the parent view
     let course: Course
     let holes: Int
     @Binding var teepar: Int    // A binding to a State var in the parent view
+    @FocusState var teefocus: TeeView.FocusableField?
+
     // State for tracking editing
     @State private var teeboxDisplaySize: CGSize = .zero
     @State private var teeboxRowHeight: CGFloat = 0
@@ -123,6 +125,11 @@ struct TeeboxEditView: View {
                             // Even though the Canvas is contained in the scroll view, only one gesture can be active
                             // at a time, so this one gets priority.
                             .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local).onChanged { gesture in
+
+                                // Force any focused text field in the parent view to submit and lose focus.
+                                // On iOS this will remove the keyboard.
+                                teefocus = nil
+
                                 // The canvas is layered on top of the VStack containing the teebox pars and handicaps
                                 // and inside the same ZStack. The canvas will therefore have the same dimensions as
                                 // teebox pars and handicaps.

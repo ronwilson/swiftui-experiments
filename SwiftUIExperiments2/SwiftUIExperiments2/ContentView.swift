@@ -26,6 +26,11 @@ enum Menu: String {
     case analysis
 }
 
+enum PersistenceStatus {
+    case idle
+    case savingCourses
+}
+
 // I needed a formatter for integers in multiple Views.
 // For some reason, using this exact code in multiple Views
 // that are in the same NavigationStack causes some kind of
@@ -44,6 +49,8 @@ struct ContentView: View {
     @State private var model = ContentViewModel()
     @StateObject var nav = NavigationStateManager()
     @State private var showingAlert = false
+    @State private var status = PersistenceStatus.idle
+    @State private var simulatePersistenceDelays = false
 
     var body: some View {
         Self._printChanges()
@@ -54,6 +61,7 @@ struct ContentView: View {
                         Label(item.title, systemImage: item.icon)
                             .foregroundColor(.primary)
                     }
+                    .disabled(item.menu == .courses && status == .savingCourses)
                 }
                 .listStyle(.plain)
                 .navigationTitle("Features")
@@ -79,9 +87,22 @@ struct ContentView: View {
                     if case .idle = model.courses.state {
                         model.courses.load()
                     }
+                    if model.changesPending {
+                        PersistenceManager.shared.saveCourses(model.courses, status: $status)
+                        model.changesPending = false
+                    }
                 }
-                .environmentObject(model.courses)
-//            }
+            if status == .savingCourses {
+                Spacer()
+                ProgressView("Saving Courses")
+            }
+            Toggle(isOn: $simulatePersistenceDelays) {
+                Text("Simulate Persistence Delays")
+            }
+            .padding()
+            .onChange(of: simulatePersistenceDelays) { value in
+                PersistenceManager.shared.simulatePersistenceDelays = value
+            }
         }
         .environmentObject(nav)
     }

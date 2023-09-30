@@ -20,6 +20,7 @@ class LoadableCourses: LoadableObject {
 final class ContentViewModel: ObservableObject {
 
     @Published var courses: LoadableCourses = LoadableCourses()
+    var changesPending: Bool = false
 
     func addCourse(_ course: Course) {
         switch courses.state {
@@ -34,6 +35,8 @@ final class ContentViewModel: ObservableObject {
             courseA.append(course)
             courses.state = .loaded(courseA)
         }
+        // always save the model
+        changesPending = true
     }
 
     func deleteCourse(_ course: Course) {
@@ -44,13 +47,7 @@ final class ContentViewModel: ObservableObject {
         } else {
             print("deleteCourse called when state is \(courses.state)")
         }
+        // always save the model
+        changesPending = true
     }
-
-//    func refresh() {
-//        objectWillChange.send()
-//    }
-
-//    func courseUpdated() {
-//        courses.objectWillChange.send()
-//    }
 }

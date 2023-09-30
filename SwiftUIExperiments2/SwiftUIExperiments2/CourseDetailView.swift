@@ -17,6 +17,7 @@ struct CourseDetailView: View {
     // will cause automatic updates for the List(course.tees) below.
     @ObservedObject var course: Course
     @State private var holestag = 0
+    @State private var showingPopover = false
 
     init(model: ContentViewModel, course: Course, holestag: Int = 0) {
         self.model = model
@@ -45,28 +46,50 @@ struct CourseDetailView: View {
                         }
                 }
                 HStack {
-                    Text("Number of Holes:")
-                    Picker("Holes", selection: $holestag) {
-                        Text("18").tag(0)
-                        Text("9").tag(1)
-                    }
-                    .pickerStyle(.segmented)
-                    .onChange(of: holestag) { value in
-                        if value == 0 {
-                            course.holes = 18
-                        } else {
-                            course.holes = 9
+                    VStack {
+                        HStack {
+                            Text("Number of Holes:")
+                            Picker("Holes", selection: $holestag) {
+                                Text("18").tag(0)
+                                Text("9").tag(1)
+                            }
+                            .pickerStyle(.segmented)
+                            .onChange(of: holestag) { value in
+                                if value == 0 {
+                                    course.holes = 18
+                                } else {
+                                    course.holes = 9
+                                }
+                                refreshTees()
+                            }
                         }
-                        refreshTees()
+                        .disabled(course.teesEdited)
+                        HStack {
+                            Toggle(isOn: $course.front9OddHcp) {
+                                Text("Front Nine has Odd Handicaps")
+                            }
+                            .onChange(of: course.front9OddHcp) { _ in
+                                refreshTees()
+                            }
+                        }
+                        .disabled(course.teesEdited)
+                    }
+                    .popover(isPresented: $showingPopover) {
+                        Text("The number of holes and handicap order cannot be changed because one or more Tee has non-default values. To change the hole count or handicap ordering, delete then re-add the Tees.")
+                            .font(.headline)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(minWidth: 300, minHeight: 150)
+                            .padding()
+                            .presentationCompactAdaptation(.popover)
+                    }
+                    if course.teesEdited {
+                        Button {
+                            showingPopover = true
+                        } label: {
+                            Image(systemName: "info.circle")
+                        }
                     }
                 }
-                .disabled(course.teesEdited)
-                HStack {
-                    Toggle(isOn: $course.front9OddHcp) {
-                        Text("Front Nine has Odd Handicaps")
-                    }
-                }
-                .disabled(course.teesEdited)
             }
             Section(header: Text("Tees")) {
                 // The list of Tees for the Course. This list and the delete swipe action work the
@@ -106,10 +129,6 @@ struct CourseDetailView: View {
     // number of teeboxes as the course has holes. This is called whenever the user changes the number of
     // holes for the course.
     private func refreshTees() {
-        for tee in course.tees {
-            if tee.teeboxes.count != course.holes {
-                course.refreshTeeHoleCount(tee:tee)
-            }
-        }
+        course.recreateTees()
     }
 }

@@ -25,7 +25,7 @@ struct CourseView: View {
     //  3. The List of courses.
     // We want what's displayed to change automatically when the state of the courses LoadableObject
     // changes. To do that, we need to observe the LoadableObject because observing changes of children
-    // variables more than one level deep in objects will not work. Observation only extends to
+    // variables more than one level deep in objects does not work. Observation only extends to
     // the Published variables of the object that is observed. For example, here we have a ContentViewModel
     // at the top level, containing a published LoadableCourses object, containing a LoadingValueState.
     //      ContentViewModel            @ObservedObject
@@ -111,6 +111,13 @@ struct CourseView: View {
                     }
                 }
                 .listStyle(.plain)
+                .onAppear() {
+                    if courses.count > 0 {
+                        // always save the model when exiting this view if the
+                        // courses array is not empty
+                        model.changesPending = true
+                    }
+                }
             }
         }
     }
@@ -124,21 +131,5 @@ struct CourseView: View {
             // Navigate to the CourseDetailView for the tapped Course
             CourseDetailView(model: model, course: course)
         }
-//        // Put a "Add Course" button on the toolbar
-//        .toolbar {
-//            Button(action: {
-//                // pass the add course action on to the top level model.
-//                // When the addCourse function adds a Course to the courses
-//                // array, the List View above will be automatically updated
-//                // because 1) the courseModel variable has the @ObservedObject property wrapper
-//                // and 2) the List(courseModel.courses) View automatically sets up the
-//                // Publish-Subscribe conection so that the List view will be invalidated
-//                // and re-drawn when the courses array is changed.
-//                model.addCourse(Course(name: "Course", holes:18))
-//            }) {
-//                Image(systemName: "plus")
-//            }
-//            .disabled(<#T##disabled: Bool##Bool#>)
-//        }
     }
 }

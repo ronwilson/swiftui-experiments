@@ -38,17 +38,18 @@ struct Tee: Identifiable, Hashable, Codable {
     var par: Int {
         return teeboxes.reduce(0, {$0 + $1.par})
     }
-    static private let hcp18: [Int] = [1,3,5,7,9,11,13,15,17,2,4,6,8,10,12,14,16,18]
+    static private let hcp18odd: [Int] = [1,3,5,7,9,11,13,15,17,2,4,6,8,10,12,14,16,18]
+    static private let hcp18even: [Int] = [2,4,6,8,10,12,14,16,18,1,3,5,7,9,11,13,15,17]
     static private let hcp9: [Int] = [1,2,3,4,5,6,7,8,9]
 
-    init(id: UUID, holes: Int) {
+    init(id: UUID, holes: Int, oddHcp: Bool) {
         self.id = id
         self.color = "Color"
         self.teeboxes = [Teebox]()
         self.rating = 0
         self.slope = 0
         for index in 0..<holes {
-            teeboxes.append(Teebox(id: UUID(), hole: index+1, par: 4, hcp: holes > 9 ? Tee.hcp18[index] : Tee.hcp9[index]))
+            teeboxes.append(Teebox(id: UUID(), hole: index+1, par: 4, hcp: holes > 9 ? oddHcp ? Tee.hcp18odd[index] : Tee.hcp18even[index] : Tee.hcp9[index]))
         }
     }
 
@@ -85,7 +86,7 @@ final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableO
     // set up in the Course Detail View object. The result is that the list of Tees
     // in the Course Detail View will be updated and re-drawn.
     func addTee() {
-        tees.append(Tee(id: UUID(), holes: self.holes))
+        tees.append(Tee(id: UUID(), holes: self.holes, oddHcp: self.front9OddHcp))
         //tees.forEach({print("tee id \($0.id)")})
     }
 
@@ -97,6 +98,9 @@ final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableO
         // find the tee
         if let index = tees.firstIndex(where:{$0.id == teeid}) {
             tees.remove(at: index)
+            if tees.isEmpty {
+                teesEdited = false
+            }
         } else {
             // this should not happen since setTeeColor is sent from the Tee detail view where there is a Tee value
             // but be defensive because other programming errors could cause the Tee.id to change.
@@ -112,6 +116,7 @@ final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableO
         if let index = tees.firstIndex(where:{$0.id == tee.id}) {
             tees[index] = tee
             teesEdited = true
+//            print("Tee updated in course, index:\(index), tee:\(tee)")
         } else {
             // this should not happen since updateTee is sent from the Tee detail view where it's guaranteed
             // that there is a Tee. However, it did happen. The reason was that a Tee's id value changed
@@ -121,15 +126,11 @@ final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableO
         }
     }
 
-    func refreshTeeHoleCount(tee: Tee) {
-        // arrays and tees have value semantics, must use an index into the array
-        if let index = tees.firstIndex(where:{$0.id == tee.id}) {
-            tees[index].holesChanged(holes: holes)
-        } else {
-            // this should not happen since refreshTeeHoleCount is sent from the course detail view
-            // where the tee is already in the tees array. However, print an error diagnostic
-            // as a defensive measure.
-            print("Error, attempting to refresh Tee data in course \(self.name) for non-existing Tee with id \(tee.id)")
+    func recreateTees() {
+        let teecount = tees.count
+        tees.removeAll()
+        for _ in 0..<teecount {
+            addTee()
         }
     }
 
@@ -147,18 +148,12 @@ final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableO
         hasher.combine(holes)
     }
 
-//    func copy(with zone: NSZone? = nil) -> Any {
-//        var copy = Course(name: self.name, holes: self.holes)
-//        copy.id = self.id
-//        copy.tees = self.tees
-//        return copy
-//    }
-
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case name = "Name"
         case holes
         case tees
+        case teesEdited
     }
 
     func encode(to encoder: Encoder) throws {
@@ -167,13 +162,15 @@ final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableO
         try container.encode(name, forKey: .name)
         try container.encode(holes, forKey: .holes)
         try container.encode(tees, forKey: .tees)
+        try container.encode(teesEdited, forKey: .teesEdited)
     }
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try values.decodeIfPresent(UUID.self, forKey: .id)!
-        self.name = try values.decodeIfPresent(String.self, forKey: .name)!
-        self.holes = try values.decodeIfPresent(Int.self, forKey: .holes)!
-        self.tees = try values.decodeIfPresent([Tee].self, forKey: .tees)!
+        self.id = try values.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        self.name = try values.decodeIfPresent(String.self, forKey: .name) ?? "Course"
+        self.holes = try values.decodeIfPresent(Int.self, forKey: .holes) ?? 18
+        self.tees = try values.decodeIfPresent([Tee].self, forKey: .tees) ?? [Tee]()
+        self.teesEdited = try values.decodeIfPresent(Bool.self, forKey: .teesEdited) ?? false
     }
 }
