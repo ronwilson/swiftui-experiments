@@ -74,13 +74,13 @@ struct ContentView: View {
                         // Note this does the same thing as .courses. It's just so we can have three items
                         // in the view. Three is not special, one would work but I wanted to understand
                         // how a list works.
-                        RoundsView()
+                        DemoRoundsView(model: model)
                     case .analysis:
                         // Note this does the same thing as .courses. It's just so we can have three items
                         // in the view. Three is not special, one would work but I wanted to understand
                         // how a list works.
                         //                    CourseView(courseModel: courseModel)
-                        RoundsView()
+                        DemoRoundsView(model: model)
                     }
                 }
                 .onAppear() {
@@ -105,6 +105,21 @@ struct ContentView: View {
             }
         }
         .environmentObject(nav)
+    }
+
+    private struct DemoRoundsView: View {
+        let model: ContentViewModel
+        var body: some View {
+            if case let .loaded(courseA) = model.courses.state {
+                if courseA.count > 0 && courseA[0].tees.count > 0 {
+                    RoundsView(tee: courseA[0].tees[0])
+                } else {
+                    RoundsView(tee: Tee(id: UUID(), holes: 18, oddHcp: true))
+                }
+            } else {
+                RoundsView(tee: Tee(id: UUID(), holes: 18, oddHcp: true))
+            }
+        }
     }
 }
 

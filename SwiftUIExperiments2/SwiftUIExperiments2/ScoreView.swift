@@ -9,6 +9,12 @@ import SwiftUI
 
 struct ScoreView: View {
 
+    enum Menu: String {
+        case scorecard
+        case group
+    }
+
+    let tee: Tee
     //$$$ These should be bindings or an observed score model
 
     @State private var penalties = 0
@@ -22,7 +28,12 @@ struct ScoreView: View {
     @State var hitsand: Bool = false
     @State private var date = "9/18/23"
 
-    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+//    let navigationItems = [
+//        NavigationItem(title: "Scorecard", icon: "tablecells", item: .scorecard),
+//        NavigationItem(title: "Group", icon: "person.3.fill", item: .groupsome),
+//    ]
+
+    //let columns = [GridItem(.flexible()), GridItem(.flexible())]
 
     func onTapArea(area: LandingArea) {
         print("Tapped \(area)")
@@ -152,22 +163,60 @@ struct ScoreView: View {
                 }
                 HStack {
                     VStack {
-                        Button(action: {
-                            print("Scorecard")
-                        }) {
+                        NavigationLink(value: ScoreView.Menu.scorecard) {
                             Image(systemName: "tablecells")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 35, height: 35)
+                                .foregroundColor(.primary)
                         }
                         .padding(.bottom, 20)
-                        Button(action: {
-                            print("Group Score")
-                        }) {
+
+                        NavigationLink(value: ScoreView.Menu.group) {
                             Image(systemName: "person.3.fill")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 35, height: 35)
+                                .foregroundColor(.primary)
+                        }
+
+
+//                        List(navigationItems) { item in
+//                                NavigationLink(value: item) {
+//                                    Image(item.icon)
+//                                        .resizable()
+//                                        .scaledToFit()
+//                                        .frame(width: 35, height: 35)
+//                                        .foregroundColor(.primary)
+//                                }
+//                                //.disabled(item.item == NavItemId.courses && status == .savingCourses)
+//                            }
+//                            .listStyle(.plain)
+//                            .navigationDestination(for: NavigationItem.self) { item in
+//                                switch item.item.rawValue {
+//                                case NavItemId.scorecard.rawValue:
+//                                    ScorecardView()
+//                                case NavItemId.groupsome.rawValue:
+//                                    ScorecardView()
+//                                default: EmptyView()
+//                                }
+//                            }
+
+//                        Button(action: {
+//                            print("Group Score")
+//                        }) {
+//                            Image(systemName: "person.3.fill")
+//                                .resizable()
+//                                .scaledToFit()
+//                                .frame(width: 35, height: 35)
+//                        }
+                    }
+                    .navigationDestination(for: ScoreView.Menu.self) { menu in
+                        switch menu {
+                        case .scorecard:
+                            ScorecardView(tee: tee)
+                        case .group:
+                            ScorecardView(tee: tee)
                         }
                     }
                 }

@@ -156,7 +156,7 @@ struct TeeboxEditView: View {
                                         // The par or hcp value will be drawn at a fixed X offset and centered on the
                                         // row that the gesture is currently over.
                                         // Note that this produces a 'snapping' effect when dragging the hcp values.
-                                        holeEditPosition = CGPoint(x:tbReader.size.width / 2.0 + 40, y:(Double(row) + 0.5)*teeboxRowHeight)
+                                        holeEditPosition = CGPoint(x:tbReader.size.width / 2.0 + 40.0, y:(Double(row) + 0.5)*teeboxRowHeight)
                                         //print("Start Drag for Hcp row \(dragStartRow)")
                                     }
                                 }

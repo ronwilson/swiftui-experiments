@@ -59,6 +59,20 @@ struct Tee: Identifiable, Hashable, Codable {
             teeboxes.append(Teebox(id: UUID(), hole: index+1, par: 4, hcp: index))
         }
     }
+
+    func handicaps(for range: ClosedRange<Int>) -> [Int] {
+        teeboxes[range].map { $0.hcp }
+    }
+
+    func pars(for range: ClosedRange<Int>) -> [Int] {
+        teeboxes[range].map { $0.par }
+    }
+
+    func strokeHandicap(for hole: Int, handicap: Int) -> Int {
+        let base = handicap / 18
+        let mod = handicap % 18
+        return base + (mod <= teeboxes[hole].hcp ? 1 : 0)
+    }
 }
 
 // Make the Course a class so it can be observable. This makes it easier and more

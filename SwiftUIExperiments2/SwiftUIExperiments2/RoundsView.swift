@@ -30,6 +30,7 @@ struct Round : Identifiable, Hashable {
 //  - Deleted       Swipe the table line containing the Course to the left, then tap the trash symbol.
 //  - Modified      Tap the course (this navigates to the CourseDetailView)
 struct RoundsView: View {
+    let tee: Tee
     @State private var addstate: String? = nil
 
     let rounds: [Round] = [
@@ -65,13 +66,13 @@ struct RoundsView: View {
             case .new:
                 NewRoundView()
             case .incomplete:
-                ScoreView()
+                ScoreView(tee: tee)
             case .complete:
                 // $$$ Go to Review Score View
-                ScoreView()
+                ScoreView(tee: tee)
             case .submitted:
                 // $$$ Go to Analyze Score View
-                ScoreView()
+                ScoreView(tee: tee)
             }
         }
         .toolbar {
