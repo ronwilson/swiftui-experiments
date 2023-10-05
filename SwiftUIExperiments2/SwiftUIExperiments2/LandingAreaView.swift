@@ -9,32 +9,35 @@ import SwiftUI
 
 struct LandingAreaView: View {
 
-    var landingAreaTapHandler: (LandingArea) -> Void
+//    typealias TapHandler = (LandingArea) -> Void
+//    var approachTapHandler: TapHandler
 
-    @State var selectedDriveArea: LandingArea = .drivenone
-    @State var selectedApproachArea: LandingArea = .approachnone
+    @Binding var drive: Drive
+    @Binding var approach: Approach
+//    @State var selectedDriveArea: LandingArea = .drivenone
+//    @State var selectedApproachArea: LandingArea = .approachnone
 
-    func onTapDriveArea(area: LandingArea) {
-        if self.selectedDriveArea == area {
+    func onTapDriveArea(area: Drive) {
+        if self.drive == area {
             // toggle all off
-            self.selectedDriveArea = .drivenone
-            landingAreaTapHandler(.drivenone)
+            self.drive = .other
+//            approachTapHandler(.drivenone)
         } else {
             // toggling selected area on
-            self.selectedDriveArea = area
-            landingAreaTapHandler(area)
+            self.drive = area
+//            approachTapHandler(area)
         }
     }
 
-    func onTapApproachArea(area: LandingArea) {
-        if self.selectedApproachArea == area {
+    func onTapApproachArea(area: Approach) {
+        if approach == area {
             // toggle all off
-            self.selectedApproachArea = .approachnone
-            landingAreaTapHandler(.approachnone)
+            approach = .other
+//            approachTapHandler(.approachnone)
         } else {
             // toggling selected area on
-            self.selectedApproachArea = area
-            landingAreaTapHandler(area)
+            approach = area
+//            approachTapHandler(area)
         }
     }
 
@@ -44,70 +47,70 @@ struct LandingAreaView: View {
             ZStack {
                 ZStack {
                     LandingAreaFairway()
-                        .fill(self.selectedDriveArea == .fairway ? .green : Color(.systemGray3))
-                        .landingAreaTapHandler(.fairway, tapHandler: onTapDriveArea)
+                        .fill(self.drive == .fairway ? .green : Color(.systemGray3))
+                        .driveTapHandler(.fairway, tapHandler: onTapDriveArea)
                     LandingAreaFairway()
                         .stroke(.black)
                     LandingAreaLeftRuff()
-                        .fill(self.selectedDriveArea == .leftruff ? .yellow : .gray)
-                        .landingAreaTapHandler(.leftruff, tapHandler: onTapDriveArea)
+                        .fill(self.drive == .leftruff ? .yellow : .gray)
+                        .driveTapHandler(.leftruff, tapHandler: onTapDriveArea)
                     LandingAreaLeftRuff()
                         .stroke(.black)
                     LandingAreaRightRuff()
-                        .fill(self.selectedDriveArea == .rightruff ? .yellow : .gray)
-                        .landingAreaTapHandler(.rightruff, tapHandler: onTapDriveArea)
+                        .fill(self.drive == .rightruff ? .yellow : .gray)
+                        .driveTapHandler(.rightruff, tapHandler: onTapDriveArea)
                     LandingAreaRightRuff()
                         .stroke(.black)
                 }
                 ZStack {
                     ZStack {
                         LandingAreaBack()
-                            .fill(self.selectedApproachArea == .back ? .yellow : .gray)
-                            .landingAreaTapHandler(.back, tapHandler: onTapApproachArea)
+                            .fill(self.approach == .back ? .yellow : .gray)
+                            .approachTapHandler(.back, tapHandler: onTapApproachArea)
                         LandingAreaBack()
                             .stroke(.black)
                         LandingAreaRight()
-                            .fill(self.selectedApproachArea == .right ? .yellow : .gray)
-                            .landingAreaTapHandler(.right, tapHandler: onTapApproachArea)
+                            .fill(self.approach == .right ? .yellow : .gray)
+                            .approachTapHandler(.right, tapHandler: onTapApproachArea)
                         LandingAreaRight()
                             .stroke(.black)
                         LandingAreaFront()
-                            .fill(self.selectedApproachArea == .front ? .yellow : .gray)
-                            .landingAreaTapHandler(.front, tapHandler: onTapApproachArea)
+                            .fill(self.approach == .front ? .yellow : .gray)
+                            .approachTapHandler(.front, tapHandler: onTapApproachArea)
                         LandingAreaFront()
                             .stroke(.black)
                         LandingAreaLeft()
-                            .fill(self.selectedApproachArea == .left ? .yellow : .gray)
-                            .landingAreaTapHandler(.left, tapHandler: onTapApproachArea)
+                            .fill(self.approach == .left ? .yellow : .gray)
+                            .approachTapHandler(.left, tapHandler: onTapApproachArea)
                         LandingAreaLeft()
                             .stroke(.black)
                     }
                     ZStack {
                         LandingAreaBackLeft()
-                            .fill(self.selectedApproachArea == .backleft ? .yellow : Color(.systemGray2))
-                            .landingAreaTapHandler(.backleft, tapHandler: onTapApproachArea)
+                            .fill(self.approach == .backleft ? .yellow : Color(.systemGray2))
+                            .approachTapHandler(.backleft, tapHandler: onTapApproachArea)
                         LandingAreaBackLeft()
                             .stroke(.black)
                         LandingAreaBackRight()
-                            .fill(self.selectedApproachArea == .backright ? .yellow : Color(.systemGray2))
-                            .landingAreaTapHandler(.backright, tapHandler: onTapApproachArea)
+                            .fill(self.approach == .backright ? .yellow : Color(.systemGray2))
+                            .approachTapHandler(.backright, tapHandler: onTapApproachArea)
                         LandingAreaBackRight()
                             .stroke(.black)
                         LandingAreaFrontRight()
-                            .fill(self.selectedApproachArea == .frontright ? .yellow : Color(.systemGray2))
-                            .landingAreaTapHandler(.frontright, tapHandler: onTapApproachArea)
+                            .fill(self.approach == .frontright ? .yellow : Color(.systemGray2))
+                            .approachTapHandler(.frontright, tapHandler: onTapApproachArea)
                         LandingAreaFrontRight()
                             .stroke(.black)
                         LandingAreaFrontLeft()
-                            .fill(self.selectedApproachArea == .frontleft ? .yellow : Color(.systemGray2))
-                            .landingAreaTapHandler(.frontleft, tapHandler: onTapApproachArea)
+                            .fill(self.approach == .frontleft ? .yellow : Color(.systemGray2))
+                            .approachTapHandler(.frontleft, tapHandler: onTapApproachArea)
                         LandingAreaFrontLeft()
                             .stroke(.black)
                     }
                     ZStack {
                         LandingAreaGreen()
-                            .fill(self.selectedApproachArea == .green ? .green : Color(.systemGray3))
-                            .landingAreaTapHandler(.green, tapHandler: onTapApproachArea)
+                            .fill(self.approach == .green ? .green : Color(.systemGray3))
+                            .approachTapHandler(.green, tapHandler: onTapApproachArea)
                         LandingAreaGreen()
                             .stroke(.black)
                     }

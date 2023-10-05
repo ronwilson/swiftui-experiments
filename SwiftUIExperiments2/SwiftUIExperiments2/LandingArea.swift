@@ -8,26 +8,26 @@
 import SwiftUI
 
 
-enum LandingArea {
-    case drivenone
-    case approachnone
-    case green
-    case backleft
-    case back
-    case backright
-    case left
-    case right
-    case frontleft
-    case front
-    case frontright
-    case fairway
-    case leftruff
-    case rightruff
-}
+//enum LandingArea {
+//    case drivenone
+//    case approachnone
+//    case green
+//    case backleft
+//    case back
+//    case backright
+//    case left
+//    case right
+//    case frontleft
+//    case front
+//    case frontright
+//    case fairway
+//    case leftruff
+//    case rightruff
+//}
 
-struct LandingAreaTapHandler: ViewModifier {
-    var area: LandingArea
-    var landingAreaTapHandler: (LandingArea) -> Void
+struct DriveTapHandler: ViewModifier {
+    var area: Drive
+    var landingAreaTapHandler: (Drive) -> Void
     func body(content: Content) -> some View {
         content
             .onTapGesture {
@@ -36,9 +36,24 @@ struct LandingAreaTapHandler: ViewModifier {
     }
 }
 
+struct ApproachTapHandler: ViewModifier {
+    var area: Approach
+    var landingAreaTapHandler: (Approach) -> Void
+    func body(content: Content) -> some View {
+        content
+            .onTapGesture {
+                landingAreaTapHandler(area)
+            }
+    }
+}
+
+
 extension View {
-    func landingAreaTapHandler(_ area: LandingArea, tapHandler: @escaping (LandingArea) -> Void) -> some View {
-        modifier(LandingAreaTapHandler(area: area, landingAreaTapHandler: tapHandler))
+    func driveTapHandler(_ area: Drive, tapHandler: @escaping (Drive) -> Void) -> some View {
+        modifier(DriveTapHandler(area: area, landingAreaTapHandler: tapHandler))
+    }
+    func approachTapHandler(_ area: Approach, tapHandler: @escaping (Approach) -> Void) -> some View {
+        modifier(ApproachTapHandler(area: area, landingAreaTapHandler: tapHandler))
     }
 }
 

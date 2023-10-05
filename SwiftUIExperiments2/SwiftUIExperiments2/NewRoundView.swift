@@ -22,7 +22,7 @@ struct NewRoundView: View {
     @State private var scoremode = ScoringMode.individual
     @State private var scoresystem = ScoringSystem.stroke
 //    @ObservedObject var courseModel : CourseModel
-    @EnvironmentObject var model : ContentViewModel
+    @EnvironmentObject var model : CoursesViewModel
 
 
     var body: some View {

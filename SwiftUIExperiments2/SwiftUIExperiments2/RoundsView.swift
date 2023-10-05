@@ -30,8 +30,10 @@ struct Round : Identifiable, Hashable {
 //  - Deleted       Swipe the table line containing the Course to the left, then tap the trash symbol.
 //  - Modified      Tap the course (this navigates to the CourseDetailView)
 struct RoundsView: View {
+    @EnvironmentObject var coursesModel : CoursesViewModel
     let tee: Tee
     @State private var addstate: String? = nil
+    @State var playerscore: PlayerScore = PlayerScore(id: UUID(), name:"Ron", hcp: 10)
 
     let rounds: [Round] = [
         Round(id: UUID(), course: "Aviara", tee: "Blue", date: "5/18/23", status: .submitted),
@@ -66,19 +68,20 @@ struct RoundsView: View {
             case .new:
                 NewRoundView()
             case .incomplete:
-                ScoreView(tee: tee)
+                ScoreView(playerscore: playerscore, tee: tee)
             case .complete:
                 // $$$ Go to Review Score View
-                ScoreView(tee: tee)
+                ScoreView(playerscore: playerscore, tee: tee)
             case .submitted:
                 // $$$ Go to Analyze Score View
-                ScoreView(tee: tee)
+                ScoreView(playerscore: playerscore, tee: tee, startHole: Int.random(in: 1...6))
             }
         }
         .toolbar {
             NavigationLink(value: newRound()) {
                 Image(systemName: "plus")
             }
+            .disabled(coursesModel.courses.courses.isEmpty)
         }
     }
 

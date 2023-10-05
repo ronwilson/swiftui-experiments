@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		081559592ACCCD0000D9E70B /* HoleScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081559582ACCCD0000D9E70B /* HoleScoreView.swift */; };
 		083AABFF2AAA49BF00929FAA /* SwiftUIExperiments2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AABFE2AAA49BF00929FAA /* SwiftUIExperiments2App.swift */; };
 		083AAC012AAA49BF00929FAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AAC002AAA49BF00929FAA /* ContentView.swift */; };
 		083AAC032AAA49BF00929FAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 083AAC022AAA49BF00929FAA /* Assets.xcassets */; };
@@ -16,6 +17,9 @@
 		083AAC132AAA4A6000929FAA /* CourseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AAC0F2AAA4A6000929FAA /* CourseModel.swift */; };
 		083AAC152AAA9A0D00929FAA /* TeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AAC142AAA9A0D00929FAA /* TeeView.swift */; };
 		083AAC172AACCE6000929FAA /* TeeboxEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AAC162AACCE5F00929FAA /* TeeboxEditView.swift */; };
+		085886042ACE6E4F003F8568 /* GroupScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085886032ACE6E4F003F8568 /* GroupScoreView.swift */; };
+		085886062ACE6E6D003F8568 /* ReviewScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085886052ACE6E6D003F8568 /* ReviewScoreView.swift */; };
+		085886082ACE7D63003F8568 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085886072ACE7D63003F8568 /* SettingsView.swift */; };
 		08B869672ABF333D00799608 /* LandingArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869662ABF333D00799608 /* LandingArea.swift */; };
 		08B869692ABF3B6000799608 /* ScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869682ABF3B6000799608 /* ScoreView.swift */; };
 		08B8696B2ABF5F4300799608 /* LandingAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8696A2ABF5F4300799608 /* LandingAreaView.swift */; };
@@ -28,10 +32,11 @@
 		08B8697B2AC3897800799608 /* ModelLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8697A2AC3897800799608 /* ModelLoader.swift */; };
 		08B8697D2AC4B69300799608 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8697C2AC4B69300799608 /* ContentViewModel.swift */; };
 		08B869822AC9B94400799608 /* ScorecardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869812AC9B94400799608 /* ScorecardView.swift */; };
-		08F5E0082ACCB26700609274 /* PlayerScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F5E0072ACCB26700609274 /* PlayerScore.swift */; };
+		08F5E0082ACCB26700609274 /* PlayerScoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F5E0072ACCB26700609274 /* PlayerScoreModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		081559582ACCCD0000D9E70B /* HoleScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoleScoreView.swift; sourceTree = "<group>"; };
 		083AABFB2AAA49BF00929FAA /* SwiftUIExperiments2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIExperiments2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		083AABFE2AAA49BF00929FAA /* SwiftUIExperiments2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIExperiments2App.swift; sourceTree = "<group>"; };
 		083AAC002AAA49BF00929FAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -42,6 +47,9 @@
 		083AAC0F2AAA4A6000929FAA /* CourseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseModel.swift; sourceTree = "<group>"; };
 		083AAC142AAA9A0D00929FAA /* TeeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeeView.swift; sourceTree = "<group>"; };
 		083AAC162AACCE5F00929FAA /* TeeboxEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeeboxEditView.swift; sourceTree = "<group>"; };
+		085886032ACE6E4F003F8568 /* GroupScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupScoreView.swift; sourceTree = "<group>"; };
+		085886052ACE6E6D003F8568 /* ReviewScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewScoreView.swift; sourceTree = "<group>"; };
+		085886072ACE7D63003F8568 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		08B869662ABF333D00799608 /* LandingArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingArea.swift; sourceTree = "<group>"; };
 		08B869682ABF3B6000799608 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		08B8696A2ABF5F4300799608 /* LandingAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingAreaView.swift; sourceTree = "<group>"; };
@@ -54,7 +62,7 @@
 		08B8697A2AC3897800799608 /* ModelLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLoader.swift; sourceTree = "<group>"; };
 		08B8697C2AC4B69300799608 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		08B869812AC9B94400799608 /* ScorecardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorecardView.swift; sourceTree = "<group>"; };
-		08F5E0072ACCB26700609274 /* PlayerScore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerScore.swift; sourceTree = "<group>"; };
+		08F5E0072ACCB26700609274 /* PlayerScoreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerScoreModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +76,82 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0815595A2ACDDB8E00D9E70B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				083AAC0F2AAA4A6000929FAA /* CourseModel.swift */,
+				08B8697C2AC4B69300799608 /* ContentViewModel.swift */,
+				08F5E0072ACCB26700609274 /* PlayerScoreModel.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		0815595B2ACDDBAA00D9E70B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				083AAC002AAA49BF00929FAA /* ContentView.swift */,
+				0815595F2ACDDC4200D9E70B /* Courses */,
+				081559612ACDDCD500D9E70B /* Rounds */,
+				081559602ACDDC7500D9E70B /* Scoring */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		0815595D2ACDDBE300D9E70B /* App */ = {
+			isa = PBXGroup;
+			children = (
+				08B869702AC1F48700799608 /* NavigationStateManager.swift */,
+				083AABFE2AAA49BF00929FAA /* SwiftUIExperiments2App.swift */,
+				085886072ACE7D63003F8568 /* SettingsView.swift */,
+			);
+			name = App;
+			sourceTree = "<group>";
+		};
+		0815595E2ACDDBFD00D9E70B /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				08B8697A2AC3897800799608 /* ModelLoader.swift */,
+				08B869762AC2076100799608 /* PersistenceManager.swift */,
+			);
+			name = Persistence;
+			sourceTree = "<group>";
+		};
+		0815595F2ACDDC4200D9E70B /* Courses */ = {
+			isa = PBXGroup;
+			children = (
+				083AAC0E2AAA4A6000929FAA /* CourseView.swift */,
+				083AAC0C2AAA4A6000929FAA /* CourseDetailView.swift */,
+				083AAC142AAA9A0D00929FAA /* TeeView.swift */,
+				083AAC162AACCE5F00929FAA /* TeeboxEditView.swift */,
+			);
+			name = Courses;
+			sourceTree = "<group>";
+		};
+		081559602ACDDC7500D9E70B /* Scoring */ = {
+			isa = PBXGroup;
+			children = (
+				08B869682ABF3B6000799608 /* ScoreView.swift */,
+				08B869662ABF333D00799608 /* LandingArea.swift */,
+				08B8696A2ABF5F4300799608 /* LandingAreaView.swift */,
+				08B8696C2ABFB73400799608 /* SandTrapView.swift */,
+				08B869812AC9B94400799608 /* ScorecardView.swift */,
+				081559582ACCCD0000D9E70B /* HoleScoreView.swift */,
+				085886032ACE6E4F003F8568 /* GroupScoreView.swift */,
+				085886052ACE6E6D003F8568 /* ReviewScoreView.swift */,
+			);
+			name = Scoring;
+			sourceTree = "<group>";
+		};
+		081559612ACDDCD500D9E70B /* Rounds */ = {
+			isa = PBXGroup;
+			children = (
+				08B8696E2AC00A0D00799608 /* RoundsView.swift */,
+				08B869722AC1FCD000799608 /* NewRoundView.swift */,
+				08B869742AC203DC00799608 /* ChooseTeeView.swift */,
+			);
+			name = Rounds;
+			sourceTree = "<group>";
+		};
 		083AABF22AAA49BE00929FAA = {
 			isa = PBXGroup;
 			children = (
@@ -87,26 +171,10 @@
 		083AABFD2AAA49BF00929FAA /* SwiftUIExperiments2 */ = {
 			isa = PBXGroup;
 			children = (
-				083AAC0F2AAA4A6000929FAA /* CourseModel.swift */,
-				083AAC002AAA49BF00929FAA /* ContentView.swift */,
-				08B8697C2AC4B69300799608 /* ContentViewModel.swift */,
-				083AAC0E2AAA4A6000929FAA /* CourseView.swift */,
-				083AAC0C2AAA4A6000929FAA /* CourseDetailView.swift */,
-				083AAC142AAA9A0D00929FAA /* TeeView.swift */,
-				083AAC162AACCE5F00929FAA /* TeeboxEditView.swift */,
-				08B869682ABF3B6000799608 /* ScoreView.swift */,
-				08B8696E2AC00A0D00799608 /* RoundsView.swift */,
-				08B869722AC1FCD000799608 /* NewRoundView.swift */,
-				08B869742AC203DC00799608 /* ChooseTeeView.swift */,
-				08B869662ABF333D00799608 /* LandingArea.swift */,
-				08B8696A2ABF5F4300799608 /* LandingAreaView.swift */,
-				08B8696C2ABFB73400799608 /* SandTrapView.swift */,
-				08F5E0072ACCB26700609274 /* PlayerScore.swift */,
-				08B869812AC9B94400799608 /* ScorecardView.swift */,
-				08B869702AC1F48700799608 /* NavigationStateManager.swift */,
-				08B8697A2AC3897800799608 /* ModelLoader.swift */,
-				08B869762AC2076100799608 /* PersistenceManager.swift */,
-				083AABFE2AAA49BF00929FAA /* SwiftUIExperiments2App.swift */,
+				0815595D2ACDDBE300D9E70B /* App */,
+				0815595A2ACDDB8E00D9E70B /* Models */,
+				0815595B2ACDDBAA00D9E70B /* Views */,
+				0815595E2ACDDBFD00D9E70B /* Persistence */,
 				083AAC022AAA49BF00929FAA /* Assets.xcassets */,
 				083AAC042AAA49BF00929FAA /* Preview Content */,
 			);
@@ -149,7 +217,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					083AABFA2AAA49BF00929FAA = {
 						CreatedOnToolsVersion = 14.3;
@@ -196,19 +264,23 @@
 				083AAC132AAA4A6000929FAA /* CourseModel.swift in Sources */,
 				08B869672ABF333D00799608 /* LandingArea.swift in Sources */,
 				08B869692ABF3B6000799608 /* ScoreView.swift in Sources */,
+				081559592ACCCD0000D9E70B /* HoleScoreView.swift in Sources */,
 				08B869772AC2076100799608 /* PersistenceManager.swift in Sources */,
 				083AAC152AAA9A0D00929FAA /* TeeView.swift in Sources */,
+				085886042ACE6E4F003F8568 /* GroupScoreView.swift in Sources */,
+				085886082ACE7D63003F8568 /* SettingsView.swift in Sources */,
 				083AAC012AAA49BF00929FAA /* ContentView.swift in Sources */,
 				083AAC172AACCE6000929FAA /* TeeboxEditView.swift in Sources */,
 				083AAC122AAA4A6000929FAA /* CourseView.swift in Sources */,
 				08B8696D2ABFB73400799608 /* SandTrapView.swift in Sources */,
 				08B8696B2ABF5F4300799608 /* LandingAreaView.swift in Sources */,
 				08B8697D2AC4B69300799608 /* ContentViewModel.swift in Sources */,
+				085886062ACE6E6D003F8568 /* ReviewScoreView.swift in Sources */,
 				083AAC102AAA4A6000929FAA /* CourseDetailView.swift in Sources */,
 				08B869752AC203DC00799608 /* ChooseTeeView.swift in Sources */,
 				08B869732AC1FCD000799608 /* NewRoundView.swift in Sources */,
 				08B869712AC1F48700799608 /* NavigationStateManager.swift in Sources */,
-				08F5E0082ACCB26700609274 /* PlayerScore.swift in Sources */,
+				08F5E0082ACCB26700609274 /* PlayerScoreModel.swift in Sources */,
 				083AABFF2AAA49BF00929FAA /* SwiftUIExperiments2App.swift in Sources */,
 				08B8696F2AC00A0D00799608 /* RoundsView.swift in Sources */,
 			);
@@ -253,6 +325,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -313,6 +386,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -354,6 +428,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = icloud.ronwilson.SwiftUIExperiments2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG TEST_PLAYER_SCORE NO_HOLE_SCORE_BUG";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

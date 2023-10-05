@@ -11,27 +11,91 @@ extension Int {
     public static let scoreIsZero: Int = 10000
 }
 
-struct PlayerScore : Identifiable{
-    let id: UUID
-    let name:String
-    let hcp: Int
-    var strokes: [Int] = [Int](repeating: 0, count: 18)
+enum Approach : String {
+    case other = "Other"
+    case green = "GIR"
+    case backleft = "Back Left"
+    case back = "Back"
+    case backright = "Back Right"
+    case left = "Left"
+    case right = "Right"
+    case frontleft = "Front Left"
+    case front = "Front"
+    case frontright = "Front Right"
+}
+
+enum Drive : String {
+    case other = "Other"
+    case fairway = "Fairway"
+    case leftruff = "Left Rough"
+    case rightruff = "Right Rough"
+}
+
+class HoleScore : Identifiable, ObservableObject {
+    var id: UUID = UUID()
+    @Published var strokes = 4
+    @Published var putts = 2
+    @Published var penalties = 0
+    @Published var goodshots = 0
+    @Published var drive: Drive = .other
+    @Published var approach: Approach = .other
+    @Published var sand = false
+
+    static func == (lhs: HoleScore, rhs: HoleScore) -> Bool {
+        return lhs.strokes == rhs.strokes
+        && lhs.putts == rhs.putts
+        && lhs.penalties == rhs.penalties
+        && lhs.goodshots == rhs.goodshots
+        && lhs.drive == rhs.drive
+        && lhs.approach == rhs.approach
+        && lhs.sand == rhs.sand
+    }
+
+    func isSandDisabled() -> Bool {
+        return approach == .other || approach == .green
+    }
+
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(id)
+//    }
+}
+
+struct PlayerScore : Identifiable {
+    var id: UUID
+    var name:String
+    var hcp: Int
+
+#if HOLE_SCORE_BUG
+    var holescores: [HoleScore] = Array(repeating: HoleScore(), count: 18)
+#else
+    var holescores: [HoleScore]
+    init(id: UUID, name: String, hcp: Int) {
+        self.id = id
+        self.name = name
+        self.hcp = hcp
+        var hs = [HoleScore]()
+        for _ in 0..<18 {
+            hs.append(HoleScore())
+        }
+        self.holescores = hs
+    }
+#endif
 
     // Derived
     var outstrokes : Int {
-        strokes[0..<9].reduce(0, {$0 + $1})
+        holescores[0..<9].reduce(0, {$0 + $1.strokes})
     }
     var instrokes : Int {
-        strokes[9..<18].reduce(0, {$0 + $1})
+        holescores[9..<18].reduce(0, {$0 + $1.strokes})
     }
     var totalstrokes : Int {
         outstrokes + instrokes
     }
     var frontStrokeValues: [Int] {
-        return Array(strokes[0...8])
+        return holescores[0...8].map({$0.strokes})
     }
     var backStrokeValues: [Int] {
-        return Array(strokes[9...17])
+        return holescores[9...17].map({$0.strokes})
     }
     func strokes(_ r: ClosedRange<Int>, tee: Tee) -> [String] {
         return r.map { holeStrokes(hole: $0, tee: tee) }
@@ -44,7 +108,7 @@ struct PlayerScore : Identifiable{
     }
 
     func holeStrokes(hole: Int, tee: Tee) -> String {
-        let strokes = strokes[hole]
+        let strokes = holescores[hole].strokes
         if strokes > 0 {
             let delta = tee.strokeHandicap(for: hole, handicap: hcp)
             if delta > 1 {
@@ -58,10 +122,10 @@ struct PlayerScore : Identifiable{
     }
 
     func holeStrokeScore(hole: Int, tee: Tee) -> Int {
-        let holescore = strokes[hole]
+        let holescore = holescores[hole].strokes
         if holescore > 0 {
             let delta = tee.strokeHandicap(for: hole, handicap: hcp)
-            let score = strokes[hole] - delta
+            let score = holescore - delta
             if score > 0 {
                 return score
             } else {
@@ -72,10 +136,10 @@ struct PlayerScore : Identifiable{
     }
 
     func strokeHoleScore(hole: Int, tee: Tee) -> String {
-        let holescore = strokes[hole]
+        let holescore = holescores[hole].strokes
         if holescore > 0 {
             let delta = tee.strokeHandicap(for: hole, handicap: hcp)
-            let score = strokes[hole] - delta
+            let score = holescore - delta
             if delta > 1 {
                 return ":\(score)"
             } else if delta > 0 {
@@ -86,7 +150,19 @@ struct PlayerScore : Identifiable{
         return ""
     }
 
+}
+
+extension HoleScore : CustomStringConvertible {
+    var description: String {
+        "Holescore id:\(id), st:\(strokes), pu:\(putts), pe:\(penalties), g:\(goodshots), d:\(drive.rawValue), a:\(approach.rawValue), sa:\(sand)"
+    }
+}
+
+#if TEST_PLAYER_SCORE
+// For testing purposes
+extension PlayerScore {
     static func randomPlayers(tee: Tee) -> [PlayerScore] {
+//        let names = ["a", "b", "cc", "d"]
         let names = ["William", "Jon", "Ronald", "Freddy"]
         var scores = [PlayerScore]()
         let count = Int.random(in: 1...4)
@@ -99,14 +175,11 @@ struct PlayerScore : Identifiable{
 
     static func randomPlayer(name: String, tee: Tee, holes: Int) -> PlayerScore {
         let hcp = Int.random(in: 18...30)
-        var playerscore = PlayerScore(id: UUID(), name: name, hcp: hcp)
+        let playerscore = PlayerScore(id: UUID(), name: name, hcp: hcp)
+        assert(holes < 18)
         for box in 0...holes {
-//        for box in tee.teeboxes {
-//            for n in 0..<100 {
-//                print("\(n), \(randomStrokes())")
-//            }
             let strokes = PlayerScore.randomStrokes()
-            playerscore.strokes[box] = tee.teeboxes[box].par + strokes
+            playerscore.holescores[box].strokes = tee.teeboxes[box].par + strokes
         }
         return playerscore
     }
@@ -133,7 +206,5 @@ struct PlayerScore : Identifiable{
         let x = Int.random(in: -523...645)
         return PlayerScore.strokes(x: x)
     }
-
-
 }
-
+#endif

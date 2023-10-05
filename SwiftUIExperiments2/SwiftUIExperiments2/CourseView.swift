@@ -14,7 +14,7 @@ import SwiftUI
 //  - Modified      Tap the course (this navigates to the CourseDetailView)
 struct CourseView: View {
     // Observe the courseModel so that changes in the courses array are automatically seen
-    @ObservedObject var model: ContentViewModel
+    @ObservedObject var model: CoursesViewModel
 
     // InnerView is needed because we want to observe changes to the courses object (a LoadableObject).
     // The courses start loading when the main ContentView first appears. See ContentView, .onAppear().
@@ -40,7 +40,7 @@ struct CourseView: View {
 
     private struct InnerView: View {
 
-        @ObservedObject var model: ContentViewModel
+        @ObservedObject var model: CoursesViewModel
         @ObservedObject var courses: LoadableCourses
 
         var body: some View {
@@ -80,7 +80,7 @@ struct CourseView: View {
 
     private struct ListView: View {
         var err: Error?
-        var model: ContentViewModel
+        var model: CoursesViewModel
         var courses: [Course]
         @State var revision: Int = 0
         var body: some View {

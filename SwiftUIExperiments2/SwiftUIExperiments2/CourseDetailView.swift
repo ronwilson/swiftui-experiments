@@ -12,14 +12,14 @@ struct CourseDetailView: View {
     // this view that depends on changes in the courseModel. The only reason to have
     // courseModel here is so that when a course name is changed, we can trigger an
     // update in the CourseView.
-    let model: ContentViewModel
+    let model: CoursesViewModel
     // course needs to be observed so that changes in the list of Tees for the course
     // will cause automatic updates for the List(course.tees) below.
     @ObservedObject var course: Course
     @State private var holestag = 0
     @State private var showingPopover = false
 
-    init(model: ContentViewModel, course: Course, holestag: Int = 0) {
+    init(model: CoursesViewModel, course: Course, holestag: Int = 0) {
         self.model = model
         self.course = course
         _holestag = State(initialValue: course.holes == 18 ? 0 : 1)

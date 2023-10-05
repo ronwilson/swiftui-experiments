@@ -13,7 +13,9 @@ struct ScorecardView: View {
 
     init(tee: Tee) {
         self.tee = tee
+#if TEST_PLAYER_SCORE
         self.players = PlayerScore.randomPlayers(tee: tee)
+#endif
     }
 
     var body: some View {
@@ -40,9 +42,10 @@ struct ScorecardInnerView: View {
 
     let tee: Tee
     let players: [PlayerScore]
-    let fontsize: CGFloat = 14
+    let fontsize: CGFloat = CGFloat(UserDefaults.scorecardFontSize)
     let colwidth = 3
     let summarywidth = 5
+    let minHeaderColWidth = 8
     let holesFront9 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     let holesBack9 = [10, 11, 12, 13, 14, 15, 16, 17, 18]
 
@@ -50,9 +53,10 @@ struct ScorecardInnerView: View {
         colorScheme == .dark ? .black : .white
     }
 
-    var maxPlayerNameLength: Int {
-        return players.reduce(0, { max($0, $1.name.count) })
+    var headerColumnWidth: Int {
+        return max(players.reduce(0, { max($0, $1.name.count) }) + 2, minHeaderColWidth)
     }
+
 
     struct ScoreRowHeader: View {
         @Environment(\.colorScheme) var colorScheme
@@ -109,7 +113,7 @@ struct ScorecardInnerView: View {
             VStack {
                 // Front 9
                 HStack(spacing: 0) {
-                    ScoreRowHeader(playernames: players.map({ $0.name }), width: maxPlayerNameLength + 2)
+                    ScoreRowHeader(playernames: players.map({ $0.name }), width: headerColumnWidth)
                     .font(.system(size: fontsize, design: .monospaced))
                     ScrollView(.horizontal, showsIndicators:false) {
                         VStack(alignment: .trailing) {
@@ -143,7 +147,7 @@ struct ScorecardInnerView: View {
                 .padding(.bottom, 20)
                 // Back 9
                 HStack(spacing: 0) {
-                    ScoreRowHeader(playernames: players.map({ $0.name }), width: maxPlayerNameLength + 2)
+                    ScoreRowHeader(playernames: players.map({ $0.name }), width: headerColumnWidth)
                     .font(.system(size: fontsize, design: .monospaced))
                     ScrollView(.horizontal, showsIndicators:false) {
                         VStack(alignment: .trailing) {
@@ -178,7 +182,7 @@ struct ScorecardInnerView: View {
                 .padding(.bottom, 20)
                 // Totals
                 HStack(spacing: 0) {
-                    SummaryRowHeader(playernames: players.map({ $0.name }), width: maxPlayerNameLength + 2)
+                    SummaryRowHeader(playernames: players.map({ $0.name }), width: headerColumnWidth)
                     .font(.system(size: fontsize, design: .monospaced))
                     ScrollView(.horizontal, showsIndicators:false) {
                         VStack(alignment: .trailing) {

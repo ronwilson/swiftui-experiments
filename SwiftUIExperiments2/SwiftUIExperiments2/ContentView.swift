@@ -18,12 +18,14 @@ var navigationItems = [
     NavigationItem(title: "Courses", icon: "person.circle", menu: .courses),
     NavigationItem(title: "Rounds", icon: "tablecells", menu: .scoring),
     NavigationItem(title: "Analysis", icon: "chart.line.uptrend.xyaxis", menu: .analysis),
+    NavigationItem(title: "Settings", icon: "gear", menu: .settings),
 ]
 
 enum Menu: String {
     case courses
     case scoring
     case analysis
+    case settings
 }
 
 enum PersistenceStatus {
@@ -46,7 +48,7 @@ enum PersistenceStatus {
 
 // this is the top-level view for the app
 struct ContentView: View {
-    @State private var model = ContentViewModel()
+    @State private var model = CoursesViewModel()
     @StateObject var nav = NavigationStateManager()
     @State private var showingAlert = false
     @State private var status = PersistenceStatus.idle
@@ -81,6 +83,8 @@ struct ContentView: View {
                         // how a list works.
                         //                    CourseView(courseModel: courseModel)
                         DemoRoundsView(model: model)
+                    case .settings:
+                        SettingsView()
                     }
                 }
                 .onAppear() {
@@ -105,10 +109,11 @@ struct ContentView: View {
             }
         }
         .environmentObject(nav)
+        .environmentObject(model)
     }
 
     private struct DemoRoundsView: View {
-        let model: ContentViewModel
+        let model: CoursesViewModel
         var body: some View {
             if case let .loaded(courseA) = model.courses.state {
                 if courseA.count > 0 && courseA[0].tees.count > 0 {

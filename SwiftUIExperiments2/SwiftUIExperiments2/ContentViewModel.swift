@@ -17,7 +17,7 @@ class LoadableCourses: LoadableObject {
     }
 }
 
-final class ContentViewModel: ObservableObject {
+final class CoursesViewModel: ObservableObject {
 
     @Published var courses: LoadableCourses = LoadableCourses()
     var changesPending: Bool = false
