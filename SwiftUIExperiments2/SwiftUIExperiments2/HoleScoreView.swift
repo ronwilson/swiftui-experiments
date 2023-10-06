@@ -19,13 +19,6 @@ struct HoleScoreView: View {
         case finish
     }
 
-//    init(score: HoleScore, holeindex: Int, tee: Tee) {
-//        self.score = score
-//        print("\(score)")
-//        self.holeindex = holeindex
-//        self.tee = tee
-//    }
-
     var body: some View {
         Self._printChanges()
         return VStack {
@@ -95,7 +88,7 @@ struct HoleScoreView: View {
                             .frame(width: 35, height: 35)
                             .foregroundColor(.primary)
                     }
-                    .padding(.top, 10)
+                    .padding(.top, 20)
                     //.padding(.leading, 10)
 
                     NavigationLink(value: Menu.group) {
@@ -105,7 +98,7 @@ struct HoleScoreView: View {
                             .frame(width: 35, height: 35)
                             .foregroundColor(.primary)
                     }
-                    .padding(.top, 20)
+                    .padding(.top, 10)
                     //.padding(.leading, 10)
                     
                     NavigationLink(value: Menu.finish) {
