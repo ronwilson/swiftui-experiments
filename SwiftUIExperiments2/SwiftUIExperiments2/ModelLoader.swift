@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum LoadingState {
-    case idle
-    case loading
-    case failed(Error)
-    case loaded
-}
+//enum LoadingState {
+//    case idle
+//    case loading
+//    case failed(Error)
+//    case loaded
+//}
 
 enum LoadingValueState<Value> {
     case idle
@@ -50,6 +50,8 @@ protocol LoadableObject: ObservableObject {
     associatedtype Output
     var state: LoadingValueState<Output> { get }
     func load()
+    // loaded may be called on a background thread
+    func loaded(value: Output?, error: Error?)
 }
 
 

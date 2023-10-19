@@ -88,7 +88,7 @@ struct CourseView: View {
             _ = revision
             return VStack {
                 if let e = err {
-                    Text("\(e.localizedDescription)")
+                    Text("\(e.localizedDescription) Tap '+' to create a new course.")
                 }
                 List(courses) { course in
                     NavigationLink(value: course) {

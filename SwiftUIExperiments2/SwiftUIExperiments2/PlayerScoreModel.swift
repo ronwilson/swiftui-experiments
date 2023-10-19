@@ -11,7 +11,7 @@ extension Int {
     public static let scoreIsZero: Int = 10000
 }
 
-enum Approach : String {
+enum Approach : String, Codable {
     case other = "Other"
     case green = "GIR"
     case backleft = "Back Left"
@@ -24,15 +24,16 @@ enum Approach : String {
     case frontright = "Front Right"
 }
 
-enum Drive : String {
+enum Drive : String, Codable {
     case other = "Other"
     case fairway = "Fairway"
     case leftruff = "Left Rough"
     case rightruff = "Right Rough"
 }
 
-class HoleScore : Identifiable, ObservableObject {
+final class HoleScore : Identifiable, Equatable, ObservableObject {
     var id: UUID = UUID()
+    //TODO: Make default strokes and putts a user setting
     @Published var strokes = 4
     @Published var putts = 2
     @Published var penalties = 0
@@ -40,6 +41,8 @@ class HoleScore : Identifiable, ObservableObject {
     @Published var drive: Drive = .other
     @Published var approach: Approach = .other
     @Published var sand = false
+
+//    init() {}
 
     static func == (lhs: HoleScore, rhs: HoleScore) -> Bool {
         return lhs.strokes == rhs.strokes
@@ -60,21 +63,24 @@ class HoleScore : Identifiable, ObservableObject {
 //    }
 }
 
-struct PlayerScore : Identifiable {
-    var id: UUID
-    var name:String
-    var hcp: Int
+final class PlayerScore : Identifiable, Equatable, ObservableObject {
+    var id: UUID = UUID()
+    @Published var name: String = ""
+    @Published var hcpIndex: Double = .nan
+    @Published var courseHcp: Int = 0
+
+    init() {}
 
 #if HOLE_SCORE_BUG
     var holescores: [HoleScore] = Array(repeating: HoleScore(), count: 18)
 #else
-    var holescores: [HoleScore]
-    init(id: UUID, name: String, hcp: Int) {
+    @Published var holescores: [HoleScore] = [HoleScore]()
+
+    convenience init(id: UUID, holecount: Int) {
+        self.init()
         self.id = id
-        self.name = name
-        self.hcp = hcp
         var hs = [HoleScore]()
-        for _ in 0..<18 {
+        for _ in 0..<holecount {
             hs.append(HoleScore())
         }
         self.holescores = hs
@@ -110,7 +116,7 @@ struct PlayerScore : Identifiable {
     func holeStrokes(hole: Int, tee: Tee) -> String {
         let strokes = holescores[hole].strokes
         if strokes > 0 {
-            let delta = tee.strokeHandicap(for: hole, handicap: hcp)
+            let delta = tee.strokeHandicap(for: hole, handicap: courseHcp)
             if delta > 1 {
                 return ":\(strokes)"
             } else if delta > 0 {
@@ -124,7 +130,7 @@ struct PlayerScore : Identifiable {
     func holeStrokeScore(hole: Int, tee: Tee) -> Int {
         let holescore = holescores[hole].strokes
         if holescore > 0 {
-            let delta = tee.strokeHandicap(for: hole, handicap: hcp)
+            let delta = tee.strokeHandicap(for: hole, handicap: courseHcp)
             let score = holescore - delta
             if score > 0 {
                 return score
@@ -138,7 +144,7 @@ struct PlayerScore : Identifiable {
     func strokeHoleScore(hole: Int, tee: Tee) -> String {
         let holescore = holescores[hole].strokes
         if holescore > 0 {
-            let delta = tee.strokeHandicap(for: hole, handicap: hcp)
+            let delta = tee.strokeHandicap(for: hole, handicap: courseHcp)
             let score = holescore - delta
             if delta > 1 {
                 return ":\(score)"
@@ -150,11 +156,85 @@ struct PlayerScore : Identifiable {
         return ""
     }
 
+    static func == (lhs: PlayerScore, rhs: PlayerScore) -> Bool {
+        return lhs.name == rhs.name &&
+        lhs.hcpIndex == rhs.hcpIndex &&
+        lhs.courseHcp == rhs.courseHcp &&
+        lhs.holescores == rhs.holescores
+    }
+
+}
+
+extension HoleScore : Codable {
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case strokes = "Name"
+        case putts
+        case penalties
+        case goodshots
+        case drive
+        case approach
+        case sand
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(strokes, forKey: .strokes)
+        try container.encode(putts, forKey: .putts)
+        try container.encode(penalties, forKey: .penalties)
+        try container.encode(goodshots, forKey: .goodshots)
+        try container.encode(drive, forKey: .drive)
+        try container.encode(approach, forKey: .approach)
+        try container.encode(sand, forKey: .sand)
+    }
+
+    convenience init(from decoder: Decoder) throws {
+        self.init()
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        strokes = try values.decodeIfPresent(Int.self, forKey: .strokes) ?? 4
+        putts = try values.decodeIfPresent(Int.self, forKey: .putts) ?? 2
+        penalties = try values.decodeIfPresent(Int.self, forKey: .penalties) ?? 0
+        goodshots = try values.decodeIfPresent(Int.self, forKey: .goodshots) ?? 0
+        drive = try values.decodeIfPresent(Drive.self, forKey: .drive) ?? .other
+        approach = try values.decodeIfPresent(Approach.self, forKey: .approach) ?? .other
+        sand = try values.decodeIfPresent(Bool.self, forKey: .sand) ?? false
+    }
+
 }
 
 extension HoleScore : CustomStringConvertible {
     var description: String {
         "Holescore id:\(id), st:\(strokes), pu:\(putts), pe:\(penalties), g:\(goodshots), d:\(drive.rawValue), a:\(approach.rawValue), sa:\(sand)"
+    }
+}
+
+extension PlayerScore : Codable {
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case hcpIndex
+        case courseHcp
+        case holescores
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try container.encode(hcpIndex, forKey: .hcpIndex)
+        try container.encode(courseHcp, forKey: .courseHcp)
+        try container.encode(holescores, forKey: .holescores)
+    }
+
+    convenience init(from decoder: Decoder) throws {
+        self.init()
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        name = try values.decodeIfPresent(String.self, forKey: .name) ?? ""
+        hcpIndex = try values.decodeIfPresent(Double.self, forKey: .hcpIndex) ?? .nan
+        holescores = try values.decodeIfPresent([HoleScore].self, forKey: .holescores) ?? [HoleScore]()
     }
 }
 
@@ -175,7 +255,10 @@ extension PlayerScore {
 
     static func randomPlayer(name: String, tee: Tee, holes: Int) -> PlayerScore {
         let hcp = Int.random(in: 18...30)
-        let playerscore = PlayerScore(id: UUID(), name: name, hcp: hcp)
+        let playerscore = PlayerScore(id: UUID(), holecount: 18)
+//        let playerscore = PlayerScore(id: UUID(), name: name, hcp: hcp)
+        playerscore.name = name
+        playerscore.courseHcp = hcp
         assert(holes < 18)
         for box in 0...holes {
             let strokes = PlayerScore.randomStrokes()

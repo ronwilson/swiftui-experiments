@@ -11,9 +11,35 @@ import SwiftUI
 class LoadableCourses: LoadableObject {
     @Published var state: LoadingValueState<[Course]> = LoadingValueState<[Course]>.idle
     typealias Output = [Course]
-    @Published var courses: [Course] = [Course]()
+//    @Published var courses: [Course] = [Course]()
     func load() {
         PersistenceManager.shared.loadCourses(self)
+    }
+//    func hasCourses() -> Bool {
+//        var has = false
+//        switch self.state {
+//        case .idle, .loading, .failed(_,_):
+//            has = false
+//        case .loaded(let coursesA):
+//            has = coursesA.count > 0
+//        }
+//        return has
+//    }
+    func loaded(value: [Course]?, error: Error?) {
+        Task {
+            await loadingComplete(value, error:error)
+        }
+    }
+    @MainActor func loadingComplete(_ courses: [Course]?, error: Error?) {
+        if let coursesA = courses {
+            print("Courses loaded, count = \(coursesA.count)")
+            self.state = .loaded(coursesA)
+        } else if let err = error {
+            print("Course loading failed: \(err.localizedDescription)")
+            self.state = .failed(err, [Course]())
+        } else {
+            fatalError("Courses Loading error: courses array is nil and error is nil")
+        }
     }
 }
 
@@ -49,5 +75,22 @@ final class CoursesViewModel: ObservableObject {
         }
         // always save the model
         changesPending = true
+    }
+
+    func course(withId id: UUID) -> Course? {
+        if case let .loaded(courseA) = courses.state {
+            return courseA.first(where: { $0.id == id })
+        }
+        return nil
+
+    }
+
+    func tee(withColor color: String, for courseId: UUID) -> Tee? {
+        if case let .loaded(courseA) = courses.state {
+            if let c = courseA.first(where: { $0.id == courseId }) {
+                return c.tee(withColor: color)
+            }
+        }
+        return nil
     }
 }

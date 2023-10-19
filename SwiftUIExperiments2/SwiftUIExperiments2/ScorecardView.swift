@@ -201,7 +201,7 @@ struct ScorecardInnerView: View {
                             .scoreBackground(type: .label)
                             // player total strokes
                             ForEach(players) { player in
-                                ScoreGridTextRow(values: numberGridRow([player.outstrokes, player.instrokes, player.totalstrokes, player.hcp, player.totalstrokes - player.hcp], width: summarywidth))
+                                ScoreGridTextRow(values: numberGridRow([player.outstrokes, player.instrokes, player.totalstrokes, player.courseHcp, player.totalstrokes - player.courseHcp], width: summarywidth))
                             }
                         }
                         .font(.system(size: fontsize, design: .monospaced))

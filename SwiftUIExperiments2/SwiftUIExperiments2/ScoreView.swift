@@ -9,43 +9,45 @@ import SwiftUI
 
 struct ScoreView: View {
 
-    @State var playerscore: PlayerScore
-    let tee: Tee
+    @State var rvm: RoundViewModel
     let startHole: Int
     let holeCount: Int
-
-    @State var holeindex: Int
     let lastHoleIndex: Int
-    @ObservedObject var holescore: HoleScore
-    @State private var date = "9/18/23"
+    @State private var holeindex: Int
+    @State private var date: Date
+    @EnvironmentObject var nav: NavigationStateManager
 
-    init(playerscore: PlayerScore, tee: Tee, startHole: Int = 1) {
-        _playerscore = State(initialValue: playerscore)
-        self.tee = tee
-        assert(startHole <= tee.teeboxes.count)
-        self.startHole = startHole
-        self.holeCount = tee.teeboxes.count
+    init(round: RoundViewModel, playerCount: Int) {
+        _rvm = State(initialValue: round)
+        self.startHole = round.round.startHole
+        assert(startHole <= round.tee.teeboxes.count)
+        self.holeCount = round.tee.teeboxes.count
         self.lastHoleIndex = (startHole - 2 + holeCount) % holeCount
-        self.holescore = playerscore.holescores[startHole - 1]
         _holeindex = State(initialValue: startHole - 1)
+        let dateFormatStyle = Date.FormatStyle(date: .abbreviated, time: .omitted)
+        if let rounddate = try? dateFormatStyle.parse(round.round.date) {
+            _date = State(initialValue: rounddate)
+        } else {
+            _date = State(initialValue: Date())
+        }
     }
 
     var body: some View {
         Self._printChanges()
         return VStack {
             VStack {
-                Text("Aviara Golf Club")
+                Text("\(rvm.course.name)")
                 HStack {
-                    Text("Blue Tee")
+                    Text("\(rvm.tee.color) Tee")
                     Spacer()
-                    Button(action: {
-                        print("Select Date")
-                    }) {
-                        Text(self.date)
-                    }
+                    DatePicker("", selection: $date, in: ...Date.now, displayedComponents: .date)
+                        .padding()
+                        .onChange(of: date) { val in
+                            rvm.round.date = date.formatted(date: .abbreviated, time: .omitted)
+                        }
                 }
             }
-            HoleScoreView(score: playerscore.holescores[holeindex], holeindex: holeindex, lastHoleIndex: lastHoleIndex, tee: tee)
+            HoleScoreView(score: rvm.round.players[0].holescores[holeindex], holeindex: holeindex, lastHoleIndex: lastHoleIndex, tee: rvm.tee)
             HStack {
                 VStack {
                     Text("Hole")
@@ -89,8 +91,22 @@ struct ScoreView: View {
         .padding()
         .navigationTitle("Scoring")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+//        .onAppear() {
+//            print("\(nav.path)")
+//        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    nav.removeAllButOne()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                        Text("Rounds")
+                    }
+                }
+            }
+        }
     }
-
-
 }
 

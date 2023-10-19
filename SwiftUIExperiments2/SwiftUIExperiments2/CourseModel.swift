@@ -73,6 +73,10 @@ struct Tee: Identifiable, Hashable, Codable {
         let mod = handicap % 18
         return base + (mod <= teeboxes[hole].hcp ? 1 : 0)
     }
+
+    func playerCourseHandicap(hcpIndex: Double) -> Int {
+        return hcpIndex.isNaN ? Int(0) : Int(round(Double(slope) / 113.0 * hcpIndex))
+    }
 }
 
 // Make the Course a class so it can be observable. This makes it easier and more
@@ -146,6 +150,14 @@ final class Course: Identifiable, Hashable, Codable /*, NSCopying*/, ObservableO
         for _ in 0..<teecount {
             addTee()
         }
+    }
+
+    func tee(withId id: UUID) -> Tee? {
+        return tees.first(where: {$0.id == id})
+    }
+
+    func tee(withColor color: String) -> Tee? {
+        return tees.first(where: {$0.color == color})
     }
 
     // required functions to satisfy the protocol requirements for this class

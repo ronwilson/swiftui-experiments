@@ -16,14 +16,14 @@ struct NavigationItem: Identifiable, Hashable {
 
 var navigationItems = [
     NavigationItem(title: "Courses", icon: "person.circle", menu: .courses),
-    NavigationItem(title: "Rounds", icon: "tablecells", menu: .scoring),
+    NavigationItem(title: "Rounds", icon: "tablecells", menu: .rounds),
     NavigationItem(title: "Analysis", icon: "chart.line.uptrend.xyaxis", menu: .analysis),
     NavigationItem(title: "Settings", icon: "gear", menu: .settings),
 ]
 
 enum Menu: String {
     case courses
-    case scoring
+    case rounds
     case analysis
     case settings
 }
@@ -31,6 +31,7 @@ enum Menu: String {
 enum PersistenceStatus {
     case idle
     case savingCourses
+    case savingRounds
 }
 
 // I needed a formatter for integers in multiple Views.
@@ -48,12 +49,18 @@ enum PersistenceStatus {
 
 // this is the top-level view for the app
 struct ContentView: View {
-    @State private var model = CoursesViewModel()
+    @StateObject var coursesModel = CoursesViewModel()
+    @StateObject var roundsModel = RoundsViewModel()
     @StateObject var nav = NavigationStateManager()
     @State private var showingAlert = false
     @State private var status = PersistenceStatus.idle
-    @State private var simulatePersistenceDelays = false
-
+    @State private var haveCourses = false
+#if SIM_COURSE_LOADING_DELAY
+    @State private var simulateCoursesLoadingDelay = false
+#endif
+#if SIM_ROUNDSMETA_LOADING_DELAY
+    @State private var simulateRoundsMetaLoadingDelay = false
+#endif
     var body: some View {
         Self._printChanges()
         return NavigationStack(path: $nav.path) {
@@ -63,7 +70,8 @@ struct ContentView: View {
                         Label(item.title, systemImage: item.icon)
                             .foregroundColor(.primary)
                     }
-                    .disabled(item.menu == .courses && status == .savingCourses)
+                    .disabled(item.menu == .courses && status == .savingCourses ||
+                              item.menu == .rounds && (status == .savingRounds || !haveCourses))
                 }
                 .listStyle(.plain)
                 .navigationTitle("Features")
@@ -71,61 +79,88 @@ struct ContentView: View {
                 .navigationDestination(for: NavigationItem.self) { item in
                     switch item.menu {
                     case .courses:
-                        CourseView(model: model)
-                    case .scoring:
+                        CourseView(model: coursesModel)
+                    case .rounds:
                         // Note this does the same thing as .courses. It's just so we can have three items
                         // in the view. Three is not special, one would work but I wanted to understand
                         // how a list works.
-                        DemoRoundsView(model: model)
+                        RoundsView()
+//                        RoundsView(rounds: roundsModel)
                     case .analysis:
                         // Note this does the same thing as .courses. It's just so we can have three items
                         // in the view. Three is not special, one would work but I wanted to understand
                         // how a list works.
                         //                    CourseView(courseModel: courseModel)
-                        DemoRoundsView(model: model)
+                        //RoundsView(rounds: roundsMetaModel)
+                        EmptyView()
                     case .settings:
                         SettingsView()
                     }
                 }
                 .onAppear() {
-                    if case .idle = model.courses.state {
-                        model.courses.load()
+                    print ("ContentView onAppear")
+//                    print ("coursesModel.courses.hasCourses = \(coursesModel.courses.hasCourses())")
+                    if case .idle = coursesModel.courses.state {
+                        coursesModel.courses.load()
                     }
-                    if model.changesPending {
-                        PersistenceManager.shared.saveCourses(model.courses, status: $status)
-                        model.changesPending = false
+                    if coursesModel.changesPending {
+                        PersistenceManager.shared.saveCourses(coursesModel.courses, status: $status)
+                        coursesModel.changesPending = false
+                    }
+                    if case .idle = roundsModel.rounds.state {
+                        roundsModel.rounds.load()
+                    }
+                }
+                .onReceive(coursesModel.courses.$state) { value in
+                    print("courses state change: \(value)")
+                    if case let .loaded(coursesA) = value {
+                        haveCourses = coursesA.count > 0
+
                     }
                 }
             if status == .savingCourses {
                 Spacer()
                 ProgressView("Saving Courses")
             }
-            Toggle(isOn: $simulatePersistenceDelays) {
-                Text("Simulate Persistence Delays")
+#if SIM_COURSE_LOADING_DELAY
+            Toggle(isOn: $simulateCoursesLoadingDelay) {
+                Text("Simulate Courses Loading Delay")
             }
             .padding()
-            .onChange(of: simulatePersistenceDelays) { value in
-                PersistenceManager.shared.simulatePersistenceDelays = value
+            .onChange(of: simulateCoursesLoadingDelay) { value in
+                PersistenceManager.shared.simulateCoursesLoadingDelay = value
             }
+#endif
+#if SIM_ROUNDSMETA_LOADING_DELAY
+            Toggle(isOn: $simulateRoundsMetaLoadingDelay) {
+                Text("Simulate Rounds Meta Loading Delay")
+            }
+            .padding()
+            .onChange(of: simulateRoundsMetaLoadingDelay) { value in
+                PersistenceManager.shared.simulateRoundsMetaLoadingDelay = value
+            }
+#endif
+
         }
         .environmentObject(nav)
-        .environmentObject(model)
+        .environmentObject(coursesModel)
+        .environmentObject(roundsModel)
     }
 
-    private struct DemoRoundsView: View {
-        let model: CoursesViewModel
-        var body: some View {
-            if case let .loaded(courseA) = model.courses.state {
-                if courseA.count > 0 && courseA[0].tees.count > 0 {
-                    RoundsView(tee: courseA[0].tees[0])
-                } else {
-                    RoundsView(tee: Tee(id: UUID(), holes: 18, oddHcp: true))
-                }
-            } else {
-                RoundsView(tee: Tee(id: UUID(), holes: 18, oddHcp: true))
-            }
-        }
-    }
+//    private struct DemoRoundsView: View {
+//        let model: CoursesViewModel
+//        var body: some View {
+//            if case let .loaded(courseA) = model.courses.state {
+//                if courseA.count > 0 && courseA[0].tees.count > 0 {
+//                    RoundsView(tee: courseA[0].tees[0])
+//                } else {
+//                    RoundsView(tee: Tee(id: UUID(), holes: 18, oddHcp: true))
+//                }
+//            } else {
+//                RoundsView(tee: Tee(id: UUID(), holes: 18, oddHcp: true))
+//            }
+//        }
+//    }
 }
 
 struct ContentView_Previews: PreviewProvider {

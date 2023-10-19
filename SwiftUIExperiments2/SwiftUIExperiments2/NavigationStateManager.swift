@@ -16,4 +16,10 @@ class NavigationStateManager: ObservableObject {
     func goToScoreView() {
 
     }
+    func removeAllButOne() {
+        if path.count > 1 {
+            print("Nav stacks: \(path.count)")
+            path.removeLast(path.count - 1)
+        }
+    }
 }
