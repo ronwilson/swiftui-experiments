@@ -30,12 +30,11 @@ enum PersistenceError: Error {
 
 class PersistenceManager {
 
-    //
+    // singleton
     static let shared = PersistenceManager()
 
     var loadedCourses: LoadableCourses?
     var loadedRounds: LoadableRounds?
-    //var model: ContentViewModel?
     var appSupportDirectoryPath: URL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     var appSupportFolder: String = "SwiftUIExperiments"
     let coursesDirectory: String = "courses"
@@ -90,35 +89,18 @@ class PersistenceManager {
         loadedCourses?.state = .loading
 
         let coursesUrl = appSupportDirectoryPath.appending(components: appSupportFolder, coursesDirectory, coursesFileName)
+//        print("\(coursesUrl)")
         Task.detached(priority: .background) {
             let result = await self.loadCoursesFile(from: coursesUrl)
 
             switch result {
             case .success(let courses):
                 self.loadedCourses?.loaded(value:courses, error: nil)
-//                await self.loadingSuccess(courses)
             case .failure(let err):
                 self.loadedCourses?.loaded(value: nil, error: err)
-//                await self.loadingError(err)
             }
         }
     }
-
-//    @MainActor func loadingSuccess(_ courses: [Course]) {
-//        print("PersistenceManager loaded \(courses.count) Courses")
-//        guard let model = self.loadedCourses else {
-//            fatalError("PersistenceManager loadingSuccess called when model is nil")
-//        }
-//        model.state = .loaded(courses)
-//    }
-//
-//    @MainActor func loadingError(_ err: Error) {
-//        print("PersistenceManager loading error \(err)")
-//        guard let model = self.loadedCourses else {
-//            fatalError("PersistenceManager loadingError called when model is nil")
-//        }
-//        model.state = .failed(err, [Course]())
-//    }
 
     func saveCoursesFile(courses: [Course]) async -> Error? {
         do {

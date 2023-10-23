@@ -81,17 +81,10 @@ extension View {
 
 struct SandTrapView: View {
 
-//    typealias TapHandler = () -> Void
-//    var sandTrapTapHandler: TapHandler
-
-//    @State var hitSandTrap: Bool = false
-
     @Binding var hitSandTrap: Bool
 
     func onTapSandTrap() {
         hitSandTrap = !hitSandTrap
-//        self.hitSandTrap = !self.hitSandTrap
-//        sandTrapTapHandler()
     }
 
     var body: some View {

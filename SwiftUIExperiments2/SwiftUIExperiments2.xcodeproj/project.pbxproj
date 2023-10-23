@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		081559592ACCCD0000D9E70B /* HoleScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081559582ACCCD0000D9E70B /* HoleScoreView.swift */; };
 		08248C782ADB85390057C2E8 /* ScoreModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08248C772ADB85390057C2E8 /* ScoreModeView.swift */; };
-		08248C7A2ADB939F0057C2E8 /* RoundPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08248C792ADB939F0057C2E8 /* RoundPlayerViewModel.swift */; };
 		083AABFF2AAA49BF00929FAA /* SwiftUIExperiments2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AABFE2AAA49BF00929FAA /* SwiftUIExperiments2App.swift */; };
 		083AAC012AAA49BF00929FAA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083AAC002AAA49BF00929FAA /* ContentView.swift */; };
 		083AAC032AAA49BF00929FAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 083AAC022AAA49BF00929FAA /* Assets.xcassets */; };
@@ -35,7 +34,7 @@
 		08B8697D2AC4B69300799608 /* CoursesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8697C2AC4B69300799608 /* CoursesViewModel.swift */; };
 		08B869822AC9B94400799608 /* ScorecardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B869812AC9B94400799608 /* ScorecardView.swift */; };
 		08D048EB2ACFA39500ED3320 /* RoundModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D048EA2ACFA39500ED3320 /* RoundModel.swift */; };
-		08D048F02AD0821200ED3320 /* RoundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D048EF2AD0821200ED3320 /* RoundViewModel.swift */; };
+		08D048F02AD0821200ED3320 /* RoundsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D048EF2AD0821200ED3320 /* RoundsViewModel.swift */; };
 		08D048F22AD300DF00ED3320 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D048F12AD300DF00ED3320 /* UserDefaults.swift */; };
 		08F5E0082ACCB26700609274 /* PlayerScoreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F5E0072ACCB26700609274 /* PlayerScoreModel.swift */; };
 /* End PBXBuildFile section */
@@ -43,7 +42,6 @@
 /* Begin PBXFileReference section */
 		081559582ACCCD0000D9E70B /* HoleScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoleScoreView.swift; sourceTree = "<group>"; };
 		08248C772ADB85390057C2E8 /* ScoreModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreModeView.swift; sourceTree = "<group>"; };
-		08248C792ADB939F0057C2E8 /* RoundPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundPlayerViewModel.swift; sourceTree = "<group>"; };
 		083AABFB2AAA49BF00929FAA /* SwiftUIExperiments2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftUIExperiments2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		083AABFE2AAA49BF00929FAA /* SwiftUIExperiments2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIExperiments2App.swift; sourceTree = "<group>"; };
 		083AAC002AAA49BF00929FAA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -71,7 +69,7 @@
 		08B869812AC9B94400799608 /* ScorecardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScorecardView.swift; sourceTree = "<group>"; };
 		08D048EA2ACFA39500ED3320 /* RoundModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundModel.swift; sourceTree = "<group>"; };
 		08D048EC2AD0582700ED3320 /* DevNotes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DevNotes.md; sourceTree = "<group>"; };
-		08D048EF2AD0821200ED3320 /* RoundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundViewModel.swift; sourceTree = "<group>"; };
+		08D048EF2AD0821200ED3320 /* RoundsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundsViewModel.swift; sourceTree = "<group>"; };
 		08D048F12AD300DF00ED3320 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		08F5E0072ACCB26700609274 /* PlayerScoreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerScoreModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,9 +91,8 @@
 				083AAC0F2AAA4A6000929FAA /* CourseModel.swift */,
 				08B8697C2AC4B69300799608 /* CoursesViewModel.swift */,
 				08F5E0072ACCB26700609274 /* PlayerScoreModel.swift */,
-				08D048EF2AD0821200ED3320 /* RoundViewModel.swift */,
+				08D048EF2AD0821200ED3320 /* RoundsViewModel.swift */,
 				08D048EA2ACFA39500ED3320 /* RoundModel.swift */,
-				08248C792ADB939F0057C2E8 /* RoundPlayerViewModel.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -116,8 +113,8 @@
 			children = (
 				08B869702AC1F48700799608 /* NavigationStateManager.swift */,
 				083AABFE2AAA49BF00929FAA /* SwiftUIExperiments2App.swift */,
-				085886072ACE7D63003F8568 /* SettingsView.swift */,
 				08D048F12AD300DF00ED3320 /* UserDefaults.swift */,
+				085886072ACE7D63003F8568 /* SettingsView.swift */,
 				08D048EC2AD0582700ED3320 /* DevNotes.md */,
 			);
 			name = App;
@@ -279,7 +276,6 @@
 				08B869822AC9B94400799608 /* ScorecardView.swift in Sources */,
 				08B8697B2AC3897800799608 /* ModelLoader.swift in Sources */,
 				08D048EB2ACFA39500ED3320 /* RoundModel.swift in Sources */,
-				08248C7A2ADB939F0057C2E8 /* RoundPlayerViewModel.swift in Sources */,
 				083AAC132AAA4A6000929FAA /* CourseModel.swift in Sources */,
 				08B869672ABF333D00799608 /* LandingArea.swift in Sources */,
 				08B869692ABF3B6000799608 /* ScoreView.swift in Sources */,
@@ -298,7 +294,7 @@
 				08B8697D2AC4B69300799608 /* CoursesViewModel.swift in Sources */,
 				085886062ACE6E6D003F8568 /* ReviewScoreView.swift in Sources */,
 				083AAC102AAA4A6000929FAA /* CourseDetailView.swift in Sources */,
-				08D048F02AD0821200ED3320 /* RoundViewModel.swift in Sources */,
+				08D048F02AD0821200ED3320 /* RoundsViewModel.swift in Sources */,
 				08B869752AC203DC00799608 /* ChooseTeeView.swift in Sources */,
 				08B869732AC1FCD000799608 /* NewRoundView.swift in Sources */,
 				08B869712AC1F48700799608 /* NavigationStateManager.swift in Sources */,

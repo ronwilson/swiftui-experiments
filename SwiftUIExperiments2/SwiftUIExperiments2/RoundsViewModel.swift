@@ -7,19 +7,24 @@
 
 import SwiftUI
 
+// A "loadable" object wrapping the Rounds data
 class LoadableRounds: LoadableObject {
     @Published var state: LoadingValueState<[Round]> = LoadingValueState<[Round]>.idle
     typealias Output = [Round]
-    @Published var rounds: [Round] = [Round]()
+
     func load() {
         PersistenceManager.shared.loadRounds(self)
     }
+
     func loaded(value: [Round]?, error: Error?) {
         // rounds must now be resolved to get the course and tee
         Task {
             await loadingComplete(value, error:error)
         }
     }
+
+    // this needs to run on the main thread because it updates the state that is
+    // bound to Views
     @MainActor func loadingComplete(_ rounds: [Round]?, error: Error?) {
         if let roundsA = rounds {
             print("Rounds loaded, count = \(roundsA.count)")
@@ -33,59 +38,31 @@ class LoadableRounds: LoadableObject {
     }
 }
 
-// Required to create
-// 1. Loaded Rounds
-//      The stored Rounds contain the courses and tee Ids only
-// 2. Loaded Coursess
-//      The course model and tee model must be found from
-//      the respective Ids in the Round model
-//      The full Course and Tee definition are needed to populate the controls
-//      in the Rounds View
-struct RoundViewModel: Identifiable, Hashable {
-    let id: UUID
-    var round: Round        // need this to be a var so that bindings to change the round data will work
-    let course: Course
-    let tee: Tee
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(round.id)
-        hasher.combine(course.id)
-        hasher.combine(tee.id)
-    }
-}
-
+// The top-level data model for Rounds
+// This is a view model to provide functions useful to views.
+// It encapsulates the rounds data as a LoadableRounds object.
 final class RoundsViewModel: ObservableObject {
 
     @Published var rounds: LoadableRounds = LoadableRounds()
     var changesPending: Bool = false
 
-    func addRound(_ round: RoundViewModel) {
-        //var changeState = false
-        var updatedRounds : [Round]? = nil
-
+    func addRound(_ round: Round) {
         switch rounds.state {
         case .idle, .loading:
             print("addRound called when state is \(rounds.state)")
-        case .failed(_,let roundsA):
-            print("Adding round \(round.round.id)")
-//            roundsA.append(round.round)
-            //changeState = true
-            updatedRounds = roundsA
-//            rounds.state = .loaded(roundsA)
-        case .loaded(let roundsA):
-            print("Adding round \(round.round.id)")
-            //roundsA.append(round.round)
-            updatedRounds = roundsA
-//            changeState = true
-//            rounds.state = .loaded(roundsA)
-        }
-        if var roundsAA = updatedRounds  {
-            roundsAA.append(round.round)
-            rounds.state = .loaded(roundsAA)
+        case .failed(_,var roundsA):
+            print("Adding round \(round.id)")
+            roundsA.append(round)
+            rounds.state = .loaded(roundsA)
+        case .loaded(var roundsA):
+            print("Adding round \(round.id)")
+            roundsA.append(round)
+            rounds.state = .loaded(roundsA)
         }
         // always save the model
         changesPending = true
     }
+
 
     func deleteRound(_ id: UUID) {
         if case var .loaded(roundsA) = rounds.state {
@@ -98,4 +75,12 @@ final class RoundsViewModel: ObservableObject {
         // always save the model
         changesPending = true
     }
+
+    func round(withId id: UUID) -> Round? {
+        if case let .loaded(roundA) = rounds.state {
+            return roundA.first(where: { $0.id == id })
+        }
+        return nil
+    }
+
 }

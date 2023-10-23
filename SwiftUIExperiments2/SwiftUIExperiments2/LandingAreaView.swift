@@ -9,23 +9,16 @@ import SwiftUI
 
 struct LandingAreaView: View {
 
-//    typealias TapHandler = (LandingArea) -> Void
-//    var approachTapHandler: TapHandler
-
     @Binding var drive: Drive
     @Binding var approach: Approach
-//    @State var selectedDriveArea: LandingArea = .drivenone
-//    @State var selectedApproachArea: LandingArea = .approachnone
 
     func onTapDriveArea(area: Drive) {
         if self.drive == area {
             // toggle all off
             self.drive = .other
-//            approachTapHandler(.drivenone)
         } else {
             // toggling selected area on
             self.drive = area
-//            approachTapHandler(area)
         }
     }
 
@@ -33,11 +26,9 @@ struct LandingAreaView: View {
         if approach == area {
             // toggle all off
             approach = .other
-//            approachTapHandler(.approachnone)
         } else {
             // toggling selected area on
             approach = area
-//            approachTapHandler(area)
         }
     }
 

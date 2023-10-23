@@ -10,6 +10,8 @@ import SwiftUI
 struct ChooseTeeView: View {
 
     var course: Course
+//    @ObservedObject var round: Round
+//    var round: Round
 
     @EnvironmentObject var nav: NavigationStateManager
     @EnvironmentObject var roundsModel: RoundsViewModel
@@ -26,6 +28,7 @@ struct ChooseTeeView: View {
                 .listStyle(.plain)
                 .navigationDestination(for: Tee.self) { tee in
                     // Navigate to setting the players for the round
+//                    ScoreModeView(course: course, tee: tee, round: round(for: tee))
                     ScoreModeView(course: course, tee: tee)
                 }
             }
@@ -37,5 +40,13 @@ struct ChooseTeeView: View {
         .navigationTitle("Choose Tee")
         .navigationBarTitleDisplayMode(.inline)
     }
+
+//    func round(for tee: Tee) -> Round {
+//        round.teeId = tee.id
+//        round.players[0].name = UserDefaults.myName
+//        round.players[0].hcpIndex = UserDefaults.myHcpIndex
+//        round.players[0].courseHcp = tee.playerCourseHandicap(hcpIndex: round.players[0].hcpIndex)
+//        return round
+//    }
 }
 

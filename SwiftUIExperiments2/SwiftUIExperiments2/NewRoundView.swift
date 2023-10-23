@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewRoundView: View {
-//    @ObservedObject var courseModel : CourseModel
+
     @EnvironmentObject var model : CoursesViewModel
 
     var body: some View {

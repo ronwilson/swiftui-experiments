@@ -7,29 +7,23 @@
 
 import SwiftUI
 
-
+// A "loadable" object wrapping the Course data
 class LoadableCourses: LoadableObject {
     @Published var state: LoadingValueState<[Course]> = LoadingValueState<[Course]>.idle
     typealias Output = [Course]
-//    @Published var courses: [Course] = [Course]()
+
     func load() {
         PersistenceManager.shared.loadCourses(self)
     }
-//    func hasCourses() -> Bool {
-//        var has = false
-//        switch self.state {
-//        case .idle, .loading, .failed(_,_):
-//            has = false
-//        case .loaded(let coursesA):
-//            has = coursesA.count > 0
-//        }
-//        return has
-//    }
+
     func loaded(value: [Course]?, error: Error?) {
         Task {
             await loadingComplete(value, error:error)
         }
     }
+
+    // this needs to run on the main thread because it updates the state that is
+    // bound to Views
     @MainActor func loadingComplete(_ courses: [Course]?, error: Error?) {
         if let coursesA = courses {
             print("Courses loaded, count = \(coursesA.count)")
@@ -43,6 +37,9 @@ class LoadableCourses: LoadableObject {
     }
 }
 
+// The top-level data model for Courses
+// This is a view model to provide functions useful to views.
+// It encapsulates the courses data as a LoadableCourses object.
 final class CoursesViewModel: ObservableObject {
 
     @Published var courses: LoadableCourses = LoadableCourses()
@@ -82,7 +79,13 @@ final class CoursesViewModel: ObservableObject {
             return courseA.first(where: { $0.id == id })
         }
         return nil
+    }
 
+    func courseName(for courseid: UUID) -> String {
+        if let course = course(withId: courseid) {
+            return course.name
+        }
+        return "Unknown Course"
     }
 
     func tee(withColor color: String, for courseId: UUID) -> Tee? {
@@ -92,5 +95,14 @@ final class CoursesViewModel: ObservableObject {
             }
         }
         return nil
+    }
+
+    func teeColor(for teeId: UUID, in courseId: UUID) -> String {
+        if let course = course(withId: courseId) {
+            if let tee = course.tee(withId: teeId) {
+                return tee.color
+            }
+        }
+        return "Unknown Tee"
     }
 }

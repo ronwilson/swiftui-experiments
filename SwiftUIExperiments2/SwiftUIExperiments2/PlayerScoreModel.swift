@@ -76,9 +76,8 @@ final class PlayerScore : Identifiable, Equatable, ObservableObject {
 #else
     @Published var holescores: [HoleScore] = [HoleScore]()
 
-    convenience init(id: UUID, holecount: Int) {
+    convenience init(holecount: Int) {
         self.init()
-        self.id = id
         var hs = [HoleScore]()
         for _ in 0..<holecount {
             hs.append(HoleScore())
@@ -234,6 +233,7 @@ extension PlayerScore : Codable {
         id = try values.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
         name = try values.decodeIfPresent(String.self, forKey: .name) ?? ""
         hcpIndex = try values.decodeIfPresent(Double.self, forKey: .hcpIndex) ?? .nan
+        courseHcp = try values.decodeIfPresent(Int.self, forKey: .courseHcp) ?? 0
         holescores = try values.decodeIfPresent([HoleScore].self, forKey: .holescores) ?? [HoleScore]()
     }
 }
@@ -255,7 +255,7 @@ extension PlayerScore {
 
     static func randomPlayer(name: String, tee: Tee, holes: Int) -> PlayerScore {
         let hcp = Int.random(in: 18...30)
-        let playerscore = PlayerScore(id: UUID(), holecount: 18)
+        let playerscore = PlayerScore(holecount: 18)
 //        let playerscore = PlayerScore(id: UUID(), name: name, hcp: hcp)
         playerscore.name = name
         playerscore.courseHcp = hcp

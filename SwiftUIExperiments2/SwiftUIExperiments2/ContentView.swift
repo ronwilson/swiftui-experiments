@@ -61,14 +61,40 @@ struct ContentView: View {
 #if SIM_ROUNDSMETA_LOADING_DELAY
     @State private var simulateRoundsMetaLoadingDelay = false
 #endif
+
+    private struct RoundsListItemView: View {
+        @ObservedObject var courses: LoadableCourses
+        let item: NavigationItem
+        var body: some View {
+            VStack (alignment: .leading) {
+                Label(item.title, systemImage: item.icon)
+                    .foregroundColor(.primary)
+                switch courses.state {
+                case .idle:
+                    ProgressView("Courses Idle")
+                case .loading:
+                    ProgressView("Loading Courses")
+                case .failed(_,_):
+                    Text("There are no courses. Add a course first before creating Rounds.")
+                case .loaded(_):
+                    EmptyView()
+                }
+            }
+        }
+    }
+
     var body: some View {
         Self._printChanges()
         return NavigationStack(path: $nav.path) {
 
             List(navigationItems) { item in
                     NavigationLink(value: item) {
-                        Label(item.title, systemImage: item.icon)
-                            .foregroundColor(.primary)
+                        if item.menu == .rounds {
+                            RoundsListItemView(courses: coursesModel.courses, item: item)
+                        } else {
+                            Label(item.title, systemImage: item.icon)
+                                .foregroundColor(.primary)
+                        }
                     }
                     .disabled(item.menu == .courses && status == .savingCourses ||
                               item.menu == .rounds && (status == .savingRounds || !haveCourses))
@@ -81,11 +107,7 @@ struct ContentView: View {
                     case .courses:
                         CourseView(model: coursesModel)
                     case .rounds:
-                        // Note this does the same thing as .courses. It's just so we can have three items
-                        // in the view. Three is not special, one would work but I wanted to understand
-                        // how a list works.
                         RoundsView()
-//                        RoundsView(rounds: roundsModel)
                     case .analysis:
                         // Note this does the same thing as .courses. It's just so we can have three items
                         // in the view. Three is not special, one would work but I wanted to understand
@@ -143,6 +165,9 @@ struct ContentView: View {
 
         }
         .environmentObject(nav)
+        // The courses and rounds models are Observable objects and they handle the loading state of the courses
+        // and rounds. They are put into the view environment so that any other view that needs them gets access
+        // without having to pass them through view initializers.
         .environmentObject(coursesModel)
         .environmentObject(roundsModel)
     }
